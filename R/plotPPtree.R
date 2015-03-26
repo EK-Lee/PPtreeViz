@@ -1,4 +1,6 @@
 #' Plot PPtree
+#' 
+#' Plot PPtree 
 #' @usage plot.PPtree(x,font.size=17,width.size=1,...)
 #' @param x PPtree object
 #' @param font.size font size of plot

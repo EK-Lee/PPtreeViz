@@ -2,7 +2,7 @@
 % Please edit documentation in R/PPTree.R
 \name{PP.Tree}
 \alias{PP.Tree}
-\title{Find tree structure using various projection pursuit indices of classification in each split.}
+\title{Tree with various PP indices}
 \usage{
 PP.Tree(origclass, origdata, PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
               energy=0,cooling=0.999,TOL=0.0001,maxiter=50000, ...)

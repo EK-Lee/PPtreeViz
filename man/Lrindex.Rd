@@ -2,7 +2,7 @@
 % Please edit documentation in R/Lrindex.R
 \name{Lrindex}
 \alias{Lrindex}
-\title{Calculate Lr projection pursuit index value}
+\title{Lr PP index}
 \usage{
 Lrindex(projclass,projdata,weight=TRUE,r=1)
 }
@@ -11,7 +11,7 @@ Lrindex(projclass,projdata,weight=TRUE,r=1)
 
 \item{projdata}{A training data  without class information}
 
-\item{weight}{weight flag in LDA, PDA and Lr index}
+\item{weight}{weight flag in Lr index}
 
 \item{r}{r in Lr index}
 }

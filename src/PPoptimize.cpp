@@ -437,7 +437,9 @@ List PPopt(IntegerVector origclass, NumericMatrix origdata,int q=1, std::string 
       }
       PutRNGstate();
       return Rcpp::List::create(Rcpp::Named("indexbest") = indexbest,
-                             Rcpp::Named("projbest") = projbest);
+                             Rcpp::Named("projbest") = projbest,
+                             Rcpp::Named("origclass") = origclass,
+                             Rcpp::Named("origdata") = origdata);
    }                           
 }
 

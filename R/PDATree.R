@@ -1,3 +1,5 @@
+#' Tree with PDA 
+#' 
 #' Find tree structure using penalized discriminant(PD) in each split. 
 #' @usage PDA.Tree(origclass, origdata, weight = TRUE, lambda=0.1, ...)
 #' @param origclass class information

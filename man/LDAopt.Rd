@@ -2,7 +2,7 @@
 % Please edit documentation in R/LDAopt.R
 \name{LDAopt}
 \alias{LDAopt}
-\title{Find the q-dim optimal projection using LDA projectin pursuit index}
+\title{PP optimization using LDA index}
 \usage{
 LDAopt(origclass, origdata,  q=1, weight = TRUE,...)
 }
@@ -21,6 +21,10 @@ LDAopt(origclass, origdata,  q=1, weight = TRUE,...)
 indexbest optimal value of LDA index value
 
 projbest optimal q-dim projection
+
+origclass class information
+
+origdata A training data  without class information
 }
 \description{
 Find the q-dim optimal projection using LDA projectin pursuit index

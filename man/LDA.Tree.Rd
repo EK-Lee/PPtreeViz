@@ -2,7 +2,7 @@
 % Please edit documentation in R/LDATree.R
 \name{LDA.Tree}
 \alias{LDA.Tree}
-\title{Find tree structure using linear discriminant(LD) in each split.}
+\title{Tree with LDA.}
 \usage{
 LDA.Tree(origclass, origdata, weight = TRUE, ...)
 }

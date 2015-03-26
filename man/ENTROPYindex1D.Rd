@@ -2,14 +2,14 @@
 % Please edit documentation in R/ENTROPYindex1D.R
 \name{ENTROPYindex1D}
 \alias{ENTROPYindex1D}
-\title{Calculate ENTROPY projection pursuit index value}
+\title{ENTROPY PP index}
 \usage{
 ENTROPYindex1D(projclass, projdata)
 }
 \arguments{
 \item{projclass}{class information}
 
-\item{projdata}{A training data  without class information}
+\item{projdata}{projected data}
 }
 \description{
 Calculate ENTROPY projection pursuit index value

@@ -1,3 +1,5 @@
+#' Tree with LDA.
+#' 
 #' Find tree structure using linear discriminant(LD) in each split.
 #' @usage LDA.Tree(origclass, origdata, weight = TRUE, ...) 
 #' @param origclass class information

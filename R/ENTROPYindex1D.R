@@ -1,7 +1,9 @@
+#' ENTROPY PP index 
+#' 
 #' Calculate ENTROPY projection pursuit index value
 #' @usage ENTROPYindex1D(projclass, projdata)
 #' @param projclass class information
-#' @param projdata A training data  without class information
+#' @param projdata projected data  
 #' @export
 #' @keywords projection pursuit
 #' @examples

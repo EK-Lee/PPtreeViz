@@ -1,6 +1,6 @@
-#' Finding PP tree structure using LDA index
+#' Visualization of each node in PPtree
 #' 
-#' Find tree structure using linear discriminant in each split.
+#' Explore PPtree with different Rules in each split.
 #' @usage PPtreeNode.Viz(PPtreeOBJ,node.id,Rule)
 #' @param PPtreeOBJ pptree object
 #' @param node.id node ID

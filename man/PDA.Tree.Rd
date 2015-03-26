@@ -2,7 +2,7 @@
 % Please edit documentation in R/PDATree.R
 \name{PDA.Tree}
 \alias{PDA.Tree}
-\title{Find tree structure using penalized discriminant(PD) in each split.}
+\title{Tree with PDA}
 \usage{
 PDA.Tree(origclass, origdata, weight = TRUE, lambda=0.1, ...)
 }

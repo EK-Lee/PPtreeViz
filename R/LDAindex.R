@@ -1,8 +1,10 @@
+#' LDA PP index
+#' 
 #' Calculate LDA projection pursuit index value
 #' @usage LDAindex(projclass,projdata,weight=TRUE)
 #' @param projclass class information
-#' @param projdata A training data  without class information
-#' @param weight weight flag in LDA, PDA and Lr index
+#' @param projdata projected data  
+#' @param weight weight flag in LDA
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
 #' Projection Pursuit for exploratory supervised classification, 
 #' Journal of Computational and Graphical statistics, 14(4):831-846.

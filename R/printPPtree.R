@@ -1,4 +1,6 @@
 #' Print PPtree result
+#' 
+#' Print PPtree result
 #' @usage print.PPtree(x,coef.print=FALSE,cutoff.print=FALSE,verbose=TRUE,...)
 #' @param x PPtree object
 #' @param coef.print print projection coefficient in each node when TRUE

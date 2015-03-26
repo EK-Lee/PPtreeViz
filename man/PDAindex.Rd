@@ -2,16 +2,16 @@
 % Please edit documentation in R/PDAindex.R
 \name{PDAindex}
 \alias{PDAindex}
-\title{Calculate PDA projection pursuit index value}
+\title{PDA PP index}
 \usage{
 PDAindex(projclass,projdata,weight=TRUE,lambda=0.1)
 }
 \arguments{
 \item{projclass}{class information}
 
-\item{projdata}{A training data  without class information}
+\item{projdata}{projected data}
 
-\item{weight}{weight flag in LDA, PDA and Lr index}
+\item{weight}{weight flag in PDA}
 
 \item{lambda}{lambda in PDA index}
 }

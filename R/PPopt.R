@@ -1,4 +1,6 @@
-#' Find the q-dim optimal projection using LDA projectin pursuit index
+#' PP optimization using various PP indices
+#' 
+#' Find the q-dim optimal projection using various projectin pursuit indices with class information
 #' @usage PPopt(origclass,origdata,q=1,PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
 #'              energy=0,cooling=0.999,TOL=0.0001,maxiter = 50000)
 #' @param origclass class information
@@ -14,6 +16,8 @@
 #' @param maxiter number of maximum iteration
 #' @return indexbest optimal value of PP index value
 #' @return projbest optimal q-dim projection
+#' @return origclass class information
+#' @return origdata A training data  without class information
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
 #' Projection Pursuit for exploratory supervised classification, 
 #' Journal of Computational and Graphical statistics, 14(4):831-846.

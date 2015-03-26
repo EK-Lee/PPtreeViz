@@ -1,3 +1,5 @@
+#' PP optimization using LDA index
+#' 
 #' Find the q-dim optimal projection using LDA projectin pursuit index
 #' @usage LDAopt(origclass, origdata,  q=1, weight = TRUE,...) 
 #' @param origclass class information
@@ -7,6 +9,8 @@
 #' @param ... arguments to be passed to methods
 #' @return indexbest optimal value of LDA index value
 #' @return projbest optimal q-dim projection
+#' @return origclass class information
+#' @return origdata A training data  without class information
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
 #' Projection Pursuit for exploratory supervised classification, 
 #' Journal of Computational and Graphical statistics, 14(4):831-846.
@@ -46,6 +50,8 @@ LDAopt<- function (origclass, origdata, q=1, weight=TRUE, ...)
    optVector<-matrix(as.numeric(opt$vectors[,1:q]),ncol=q)
    proj.data<-origdata%*%optVector
    optindex<-LDAindex(origclass,proj.data,weight)  
-   
-   return(list(indexbest=optindex,projbest=optVector))
+   optobj<-list(indexbest=optindex,projbest=optVector,origclass = origclass,origdata= origdata)
+   class(optobj)<-append(class(optobj),"PPoptim")
+   return(optobj)
+
 }

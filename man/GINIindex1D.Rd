@@ -2,17 +2,17 @@
 % Please edit documentation in R/GINIindex.R
 \name{GINIindex1D}
 \alias{GINIindex1D}
-\title{Calculate Gini projection pursuit index value}
+\title{GINI PP index}
 \usage{
 GINIindex1D(projclass,projdata)
 }
 \arguments{
 \item{projclass}{class information}
 
-\item{projdata}{A training data  without class information}
+\item{projdata}{projected data}
 }
 \description{
-Calculate Gini projection pursuit index value
+Calculate GINI projection pursuit index value
 }
 \examples{
 data(iris)

@@ -1,4 +1,6 @@
-#' Find the q-dim optimal projection using PDA index for classification
+#' PP optimization using PDA index
+#' 
+#'  Find the q-dim optimal projection using PDA index for classification
 #' @usage PDAopt(origclass, origdata,q=1, weight=TRUE,lambda=0.1, ...) 
 #' @param origdata A training data  without class information
 #' @param origclass class information
@@ -8,6 +10,8 @@
 #' @param ... arguments to be passed to methods
 #' @return indexbest optimal value of PDA index value
 #' @return projbest optimal q-dim projection
+#' @return origclass class information
+#' @return origdata A training data  without class information
 #' @references Lee, EK., Cook, D.(2010) 
 #' A projection pursuit index for large p small n data, 
 #' Statistics and Computing, 20:381-392.
@@ -49,7 +53,9 @@ PDAopt <- function(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...)
    optVector<-matrix(as.numeric(opt$vectors[,1:q]),ncol=q)
    proj.data<-origdata%*%optVector
    optindex<-PDAindex(origclass,proj.data,weight,lambda)  
-   return(list(indexbest=optindex,projbest=optVector))
+   optobj<-list(indexbest=optindex,projbest=optVector,origclass = origclass,origdata= origdata)
+   class(optobj)<-append(class(optobj),"PPoptim")
+   return(optobj)
 }
   
     

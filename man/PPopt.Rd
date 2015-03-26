@@ -2,7 +2,7 @@
 % Please edit documentation in R/PPopt.R
 \name{PPopt}
 \alias{PPopt}
-\title{Find the q-dim optimal projection using LDA projectin pursuit index}
+\title{PP optimization using various PP indices}
 \usage{
 PPopt(origclass,origdata,q=1,PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
              energy=0,cooling=0.999,TOL=0.0001,maxiter = 50000)
@@ -34,9 +34,13 @@ PPopt(origclass,origdata,q=1,PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
 indexbest optimal value of PP index value
 
 projbest optimal q-dim projection
+
+origclass class information
+
+origdata A training data  without class information
 }
 \description{
-Find the q-dim optimal projection using LDA projectin pursuit index
+Find the q-dim optimal projection using various projectin pursuit indices with class information
 }
 \examples{
 data(iris)

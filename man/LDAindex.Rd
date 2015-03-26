@@ -2,16 +2,16 @@
 % Please edit documentation in R/LDAindex.R
 \name{LDAindex}
 \alias{LDAindex}
-\title{Calculate LDA projection pursuit index value}
+\title{LDA PP index}
 \usage{
 LDAindex(projclass,projdata,weight=TRUE)
 }
 \arguments{
 \item{projclass}{class information}
 
-\item{projdata}{A training data  without class information}
+\item{projdata}{projected data}
 
-\item{weight}{weight flag in LDA, PDA and Lr index}
+\item{weight}{weight flag in LDA}
 }
 \description{
 Calculate LDA projection pursuit index value

@@ -1,3 +1,5 @@
+#' predict PPtree
+#' 
 #' Predict class for the test set and calculate prediction error 
 #' After finding tree structure, predict class for the test set and calculate prediction error.
 #' @usage PP.classify(Tree.result, test.data, Rule, true.class=NULL,...)  

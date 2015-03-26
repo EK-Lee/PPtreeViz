@@ -2,7 +2,7 @@
 % Please edit documentation in R/PDAopt.R
 \name{PDAopt}
 \alias{PDAopt}
-\title{Find the q-dim optimal projection using PDA index for classification}
+\title{PP optimization using PDA index}
 \usage{
 PDAopt(origclass, origdata,q=1, weight=TRUE,lambda=0.1, ...)
 }
@@ -23,6 +23,10 @@ PDAopt(origclass, origdata,q=1, weight=TRUE,lambda=0.1, ...)
 indexbest optimal value of PDA index value
 
 projbest optimal q-dim projection
+
+origclass class information
+
+origdata A training data  without class information
 }
 \description{
 Find the q-dim optimal projection using PDA index for classification

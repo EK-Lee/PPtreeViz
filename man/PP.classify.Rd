@@ -2,8 +2,7 @@
 % Please edit documentation in R/PPclassify.R
 \name{PP.classify}
 \alias{PP.classify}
-\title{Predict class for the test set and calculate prediction error
-After finding tree structure, predict class for the test set and calculate prediction error.}
+\title{predict PPtree}
 \usage{
 PP.classify(Tree.result, test.data, Rule, true.class=NULL,...)
 }
