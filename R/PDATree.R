@@ -1,14 +1,15 @@
 #' Find tree structure using penalized discriminant(PD) in each split. 
-#' @usage PDA.Tree.viz(i.class, i.data, weight = TRUE, lambda=1, ...)
-#' @param i.data A training data  without class information
-#' @param i.class class information
-#' @param weight weight flag using in LDA index
+#' @usage PDA.Tree(origclass, origdata, weight = TRUE, lambda=0.1, ...)
+#' @param origclass class information
+#' @param origdata A training data  without class information
+#' @param weight weight flag in PDA index
 #' @param lambda a parameter for PDA index
-#' @return Tree.Struct Tree structure
-#' @return Alpha.Keep 1D projection of each split
-#' @return C.Keep spliting rule for each split
-#' @return orig.class i.class
-#' @return orig.data i.data
+#' @param ... arguments to be passed to methods
+#' @return Tree.Struct Tree structure of PPtree result
+#' @return projbest.node 1-dim optimal projections of each split node
+#' @return splitCutoff.node cutoff values of each split node 
+#' @return origclass original class 
+#' @return origdata original data
 #' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
 #' PPtree: Projection pursuit classification tree, 
 #' Electronic Journal of Statistics, 7:1369-1386.
@@ -16,28 +17,29 @@
 #' @keywords tree
 #' @examples
 #' data(iris)
-#' Tree.result <- PDA.Tree.viz(iris[,5],iris[,1:4],lambda=0.2)
+#' Tree.result <- PDA.Tree(iris[,5],iris[,1:4],lambda=0.2)
 #' Tree.result
-PDA.Tree.viz<-function(i.class,i.data,weight = TRUE,lambda=1,...) 
+PDA.Tree<-function(origclass,origdata,weight = TRUE,lambda=0.1,...) 
 {
-    i.data <- as.matrix(i.data)
-    Find.proj <- function(i.class, i.data,lambda, weight, ...) {
-        n <- nrow(i.data)
-        p <- ncol(i.data)
-        g <- table(i.class)
+    origdata <- as.matrix(origdata)
+    Find.proj <- function(origclass, origdata,lambda, weight, ...) {
+        n <- nrow(origdata)
+        p <- ncol(origdata)
+        g <- table(origclass)
         g.name <- as.numeric(factor(names(g)))
         G <- length(g)
-        a.proj.best <- as.matrix(as.numeric(PDA.opt.1D(i.class,i.data,lambda,weight)$proj.best))
-        proj.data <- as.matrix(i.data) %*% a.proj.best
+        a.proj.best <- PDAopt(as.numeric(as.factor(origclass)),
+                                                    origdata,weight, q=1, lambda)$projbest        
+        proj.data <- as.matrix(origdata) %*% a.proj.best
         sign <- sign(a.proj.best[abs(a.proj.best) == max(abs(a.proj.best))])
         index <- (1:p) * (abs(a.proj.best) == max(abs(a.proj.best)))
         index <- index[index > 0]
         if (G == 2) {
-            class <- i.class
+            class <- origclass
         }
         else {
-            m <- tapply(c(proj.data), i.class, mean)
-            sd <- tapply(c(proj.data), i.class, sd)
+            m <- tapply(c(proj.data), origclass, mean)
+            sd <- tapply(c(proj.data), origclass, sd)
             sd.sort <- sort.list(sd)
             m.list <- sort.list(m)
             m.sort <- sort(m)
@@ -52,16 +54,17 @@ PDA.Tree.viz<-function(i.class,i.data,weight = TRUE,lambda=1,...)
                 }
             }
             class <- rep(0, n)
-            for (i in 1:split) class <- class + (as.numeric(factor(i.class)) == m.name[i])
+            for (i in 1:split) class <- class + (as.numeric(factor(origclass)) == m.name[i])
             class <- 2 - class
             g <- table(class)
             g.name <- as.numeric(names(g))
             G <- length(g)
-            n <- nrow(i.data)
-            a.proj.best <- as.matrix(as.numeric(PDA.opt.1D(class,i.data,lambda,weight,)$proj.best))
+            n <- nrow(origdata)
+            a.proj.best <- PDAopt(as.numeric(as.factor(class)),
+                                                        origdata,weight,q=1,lambda)$projbest
             if (sign != sign(a.proj.best[index])) 
                 a.proj.best <- -a.proj.best
-            proj.data <- as.matrix(i.data) %*% a.proj.best
+            proj.data <- as.matrix(origdata) %*% a.proj.best
         }
         m.LR <- tapply(proj.data, class, mean)
         temp.list<-sort.list(m.LR)
@@ -82,7 +85,7 @@ PDA.Tree.viz<-function(i.class,i.data,weight = TRUE,lambda=1,...)
                  m.LR[2] * (IQR.LR[1]/sqrt(n.LR[1])))/
                ((IQR.LR[1]/sqrt(n.LR[1]))+(IQR.LR[2]/sqrt(n.LR[2])))
         C <- c(c1, c2, c3, c4,c5,c6)
-        Index <-PDAindex1(as.numeric(as.factor(class)),proj.data,lambda)
+        Index <-PDAindex(as.numeric(as.factor(class)),proj.data,weight,lambda)
 
         Alpha <- t(a.proj.best)
         IOindexR <- NULL
@@ -93,10 +96,10 @@ PDA.Tree.viz<-function(i.class,i.data,weight = TRUE,lambda=1,...)
         list(Index=Index,Alpha = Alpha, C = C, IOindexL = IOindexL, 
             IOindexR = IOindexR)
     }
-    Tree.construct <- function(i.class, i.data, Tree.Struct,  id, rep, rep1, rep2, Alpha.Keep, C.Keep, lambda,...) {
-        i.class <- as.integer(i.class)
-        n <- nrow(i.data)
-        g <- table(i.class)
+    Tree.construct <- function(origclass, origdata, Tree.Struct,  id, rep, rep1, rep2, projbest.node, splitCutoff.node, lambda,...) {
+        origclass <- as.integer(origclass)
+        n <- nrow(origdata)
+        g <- table(origclass)
         G <- length(g)
         if (length(Tree.Struct) == 0) {
             Tree.Struct <- matrix(1:(2 * G - 1), ncol = 1)
@@ -104,8 +107,8 @@ PDA.Tree.viz<-function(i.class,i.data,weight = TRUE,lambda=1,...)
         }
         if (G == 1) {
             Tree.Struct[id, 3] <- as.numeric(names(g))
-            list(Tree.Struct = Tree.Struct, Alpha.Keep = Alpha.Keep, 
-                C.Keep = C.Keep, rep = rep, rep1 = rep1, rep2 = rep2)
+            list(Tree.Struct = Tree.Struct, projbest.node = projbest.node, 
+                splitCutoff.node = splitCutoff.node, rep = rep, rep1 = rep1, rep2 = rep2)
         }
         else {
             Tree.Struct[id, 2] <- rep1
@@ -114,63 +117,63 @@ PDA.Tree.viz<-function(i.class,i.data,weight = TRUE,lambda=1,...)
             rep1 <- rep1 + 1
             Tree.Struct[id, 4] <- rep2
             rep2 <- rep2 + 1
-            a <- Find.proj(i.class, i.data,lambda,weight)
-            C.Keep <- rbind(C.Keep, a$C)
-            Alpha.Keep <- rbind(Alpha.Keep, a$Alpha)
+            a <- Find.proj(origclass, origdata,lambda,weight)
+            splitCutoff.node <- rbind(splitCutoff.node, a$C)
+            projbest.node <- rbind(projbest.node, a$Alpha)
             Tree.Struct[id, 5] <- a$Index            
-            t.class <- i.class
-            t.data <- i.data
+            t.class <- origclass
+            t.data <- origdata
             t.class <- t.class * a$IOindexL
             t.n <- length(t.class[t.class == 0])
             t.index <- sort.list(t.class)
             t.index <- sort(t.index[-(1:t.n)])
             t.class <- t.class[t.index]
-            t.data <- i.data[t.index, ]
-            b <- Tree.construct(t.class, t.data, Tree.Struct,  Tree.Struct[id, 2], rep, rep1, rep2, Alpha.Keep, C.Keep,lambda/G)
+            t.data <- origdata[t.index, ]
+            b <- Tree.construct(t.class, t.data, Tree.Struct,  Tree.Struct[id, 2], rep, rep1, rep2, projbest.node, splitCutoff.node,lambda/G)
             Tree.Struct <- b$Tree.Struct
-            Alpha.Keep <- b$Alpha.Keep
-            C.Keep <- b$C.Keep
+            projbest.node <- b$projbest.node
+            splitCutoff.node <- b$splitCutoff.node
             rep <- b$rep
             rep1 <- b$rep1
             rep2 <- b$rep2
-            t.class <- i.class
-            t.data <- i.data
+            t.class <- origclass
+            t.data <- origdata
             t.class <- (t.class * a$IOindexR)
             t.n <- length(t.class[t.class == 0])
             t.index <- sort.list(t.class)
             t.index <- sort(t.index[-(1:t.n)])
             t.class <- t.class[t.index]
-            t.data <- i.data[t.index, ]
+            t.data <- origdata[t.index, ]
             n <- nrow(t.data)
             G <- length(table(t.class))
             b <- Tree.construct(t.class, t.data, Tree.Struct, 
-                Tree.Struct[id, 3], rep, rep1, rep2, Alpha.Keep, C.Keep,  lambda)
+                Tree.Struct[id, 3], rep, rep1, rep2, projbest.node, splitCutoff.node,  lambda)
             Tree.Struct <- b$Tree.Struct
-            Alpha.Keep <- b$Alpha.Keep
-            C.Keep <- b$C.Keep
+            projbest.node <- b$projbest.node
+            splitCutoff.node <- b$splitCutoff.node
             rep <- b$rep
             rep1 <- b$rep1
             rep2 <- b$rep2
         }
-        list(Tree.Struct = Tree.Struct, Alpha.Keep = Alpha.Keep, 
-            C.Keep = C.Keep, rep = rep, rep1 = rep1, rep2 = rep2)
+        list(Tree.Struct = Tree.Struct, projbest.node = projbest.node, 
+            splitCutoff.node = splitCutoff.node, rep = rep, rep1 = rep1, rep2 = rep2)
     }
-    C.Keep <- NULL
-    Alpha.Keep <- NULL
+    splitCutoff.node <- NULL
+    projbest.node <- NULL
     Tree.Struct <- NULL
     id <- 1
     rep1 <- 2
     rep2 <- 1
     rep <- 1
 
-    Tree.final <- Tree.construct(i.class, i.data, Tree.Struct, 
-        id, rep, rep1, rep2, Alpha.Keep, C.Keep,lambda)
+    Tree.final <- Tree.construct(origclass, origdata, Tree.Struct, 
+        id, rep, rep1, rep2, projbest.node, splitCutoff.node,lambda)
     Tree.Struct <- Tree.final$Tree.Struct
     colnames(Tree.Struct)<-c("id","L.node.ID","R.F.node.ID","Coef.ID","Index")   
-    Alpha.Keep <- Tree.final$Alpha.Keep
-    C.Keep <- Tree.final$C.Keep
-    treeobj<-list(Tree.Struct = Tree.Struct, Alpha.Keep = Alpha.Keep, 
-        C.Keep = C.Keep,orig.class = i.class,orig.data= i.data)
+    projbest.node <- Tree.final$projbest.node
+    splitCutoff.node <- Tree.final$splitCutoff.node
+    treeobj<-list(Tree.Struct = Tree.Struct, projbest.node = projbest.node, 
+        splitCutoff.node = splitCutoff.node,origclass = origclass,origdata= origdata)
     class(treeobj)<-append(class(treeobj),"PPtree")
     return(treeobj)
 }
