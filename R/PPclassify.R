@@ -115,7 +115,8 @@ PP.classify <- function(Tree.result,test.data,Rule,true.class=NULL,...) {
    } else {
       predict.error <- NA
    }  
-   predict.class <- temp$test.class
+   class.name<-names(table(Tree.result$origclass))
+   predict.class <- class.name[temp$test.class]
    list(predict.error=predict.error, predict.class=predict.class)
 }
 

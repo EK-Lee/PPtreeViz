@@ -16,7 +16,7 @@
 #' Tree.result
 #' PPtreeNode.Viz(Tree.result,1,1)
 PPtreeNode.Viz<-function(PPtreeOBJ,node.id,Rule){
-   #library(ggplot2)
+  
    searchGroup<-function(node.id,TS,gName){
       flag<-TRUE
       sel.id<-TS[node.id,2:3]
@@ -55,7 +55,8 @@ PPtreeNode.Viz<-function(PPtreeOBJ,node.id,Rule){
                 geom_vline(xintercept=cut.off[TS[node.id,4],Rule],linetype="longdash",lwd=1,col=2)
       vID <-1:ncol(origdata)
       coef.data<-data.frame(vID = vID,coef=Alpha[TS[node.id,4],])
-      p2<-ggplot(coef.data,aes(x=vID,y=coef))+geom_bar(stat="identity",width=0.1)+
+      bin.width<-ifelse(ncol(origdata)>100,1,0.1)
+      p2<-ggplot(coef.data,aes(x=vID,y=coef))+geom_bar(stat="identity",width=bin.width)+
          geom_hline(yintercept=0) + geom_hline(yintercept=c(-1,1)*1/ncol(origdata),col=2,linetype="dashed") +
         xlab("variable ID")+ggtitle(paste("Node",node.id,sep=" "))
       gridExtra::grid.arrange(p2, p1,nrow=1)

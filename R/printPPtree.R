@@ -76,9 +76,9 @@ print.PPtree<-function(x,coef.print=FALSE,cutoff.print=FALSE,verbose=TRUE,...){
    colnames(cut.off)<-paste("Rule",1:ncol(cut.off),sep="")
    rownames(cut.off)<-paste("cut",1:nrow(cut.off),sep="")
 
-   TreePrint.output<-paste("=====================================",
-                           "\nProjection Pursuit Tree result",
-                           "\n=====================================\n")
+   TreePrint.output<-paste("===================================================",
+                           "\nProjection Pursuit Classification Tree result",
+                           "\n===================================================\n")
    for(i in 1:length(TreePrint))
       TreePrint.output<-paste(TreePrint.output,TreePrint[i],sep="\n")
    TreePrint.output<-paste(TreePrint.output,"\n",sep="")
@@ -104,20 +104,20 @@ print.PPtree<-function(x,coef.print=FALSE,cutoff.print=FALSE,verbose=TRUE,...){
    if(verbose){
       cat(TreePrint.output)
       if(coef.print){
-         cat(#"\n-------------------------------------",
+         cat(#"\n---------------------------------------------------",
              "\nProjection Coefficient in each node",
-             "\n-------------------------------------\n")
+             "\n---------------------------------------------------\n")
          print(round(Alpha,4))
       }
       if(cutoff.print){
-         cat(#"\n-------------------------------------",
+         cat(#"\n---------------------------------------------------",
              "\nCutoff values of each node",
-             "\n-------------------------------------\n")
+             "\n---------------------------------------------------\n")
          print(round(cut.off,4))
       }    
-      cat(#"\n-------------------------------------",
+      cat(#"\n---------------------------------------------------",
           "\nError rates of various cutoff values",
-          "\n-------------------------------------\n")
+          "\n---------------------------------------------------\n")
       print(round(error.rate,4))
    }    
       return(invisible(TreePrint)) 
