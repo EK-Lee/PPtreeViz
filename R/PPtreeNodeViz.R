@@ -39,6 +39,7 @@ PPtreeNode.Viz<-function(PPtreeOBJ,node.id,Rule){
    cut.off<-PPtreeOBJ$splitCutoff.node
    origdata<-PPtreeOBJ$origdata
    origclass<-PPtreeOBJ$origclass
+   p<-ncol(origdata)
    gName<-names(table(origclass))
    if(TS[node.id,2]!=0){
       selG<-searchGroup(node.id,TS,gName)
@@ -53,12 +54,14 @@ PPtreeNode.Viz<-function(PPtreeOBJ,node.id,Rule){
       p1<- ggplot(plot.data, aes(x = proj.data,group=origclass))+
                 geom_histogram( aes(y = ..density.., fill = origclass))+
                 geom_vline(xintercept=cut.off[TS[node.id,4],Rule],linetype="longdash",lwd=1,col=2)
-      vID <-1:ncol(origdata)
+      vID <-1:p
       coef.data<-data.frame(vID = vID,coef=Alpha[TS[node.id,4],])
-      bin.width<-ifelse(ncol(origdata)>100,1,0.1)
+      bin.width<-ifelse(p>100,1,0.1)
+      y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
+      
       p2<-ggplot(coef.data,aes(x=vID,y=coef))+geom_bar(stat="identity",width=bin.width)+
-         geom_hline(yintercept=0) + geom_hline(yintercept=c(-1,1)*1/ncol(origdata),col=2,linetype="dashed") +
-        xlab("variable ID")+ggtitle(paste("Node",node.id,sep=" "))
+         geom_hline(yintercept=0) + geom_hline(yintercept=c(-1,1)*1/sqrt(ncol(origdata)),col=2,linetype="dashed") +
+        xlab("variable ID")+ggtitle(paste("Node",node.id,sep=" "))+ylim(-y.max,y.max)
       gridExtra::grid.arrange(p2, p1,nrow=1)
    } else{
       sel.id<-which(origclass==gName[TS[node.id,3]])

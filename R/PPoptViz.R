@@ -16,8 +16,8 @@ PPopt.Viz<-function(PPoptOBJ){
 
    proj.data<-PPoptOBJ$origdata%*%PPoptOBJ$projbest
    q<-ncol(proj.data)
-   vID <-1:ncol(PPoptOBJ$origdata)
-   
+   p<-ncol(PPoptOBJ$origdata)   
+   vID <-1:p
    if(q==1){
       ..density.. <- NULL
       plot.data<-data.frame(proj.data = proj.data,origclass=PPoptOBJ$origclass)
@@ -25,8 +25,11 @@ PPopt.Viz<-function(PPoptOBJ){
                 geom_histogram( aes(y = ..density.., fill = origclass))
 
       coef.data<-data.frame(vID = vID,coef=PPoptOBJ$projbest[,1])
-      p2<-ggplot(coef.data,aes(x=vID,y=coef))+geom_bar(stat="identity",width=0.1)+
-         geom_hline(yintercept=0) + 
+      bin.width<-ifelse(p>100,1,0.1)
+      y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
+      
+      p2<-ggplot(coef.data,aes(x=vID,y=coef))+geom_bar(stat="identity",width=bin.width)+
+         geom_hline(yintercept=0) + ylim(-y.max,y.max) +
         xlab("variable ID")+ggtitle("Coefficients of Best Projection")
       gridExtra::grid.arrange(p2, p1,nrow=1)   
    } else{
@@ -36,10 +39,13 @@ PPopt.Viz<-function(PPoptOBJ){
          for(j in 1:q){
             if(i==j)
             {  coef.data<-data.frame(vID = vID,coef=PPoptOBJ$projbest[,i])
+               bin.width<-ifelse(p>100,1,0.1)
+               y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
+
                plot.list[[list.id]]<-ggplot(coef.data,aes(x=vID,y=coef))+
-                                     geom_bar(stat="identity",width=0.1)+
+                                     geom_bar(stat="identity",width=bin.width)+
                                      geom_hline(yintercept=0) + 
-                                     xlab("variable ID")+
+                                     xlab("variable ID")+ylim(-y.max,y.max)+
                                      ggtitle(paste("Coefficients of Best Projection - dim",as.character(i),sep=""))
                list.id <- list.id+1
             } else

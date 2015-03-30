@@ -80,11 +80,13 @@ LDA.Tree<-function(origclass, origdata, weight = TRUE, ...)
         c4 <- (m.LR[1] * sd.LR[2]/sqrt(n.LR[2]) + 
                  m.LR[2] * sd.LR[1]/sqrt(n.LR[1]))/
                  (sd.LR[1]/sqrt(n.LR[1])+sd.LR[2]/sqrt(n.LR[2]))
-        c5 <- (m.LR[1] * IQR.LR[2] + m.LR[2] * IQR.LR[1])/sum(IQR.LR)      
-        c6 <- (m.LR[1] * (IQR.LR[2]/sqrt(n.LR[2])) + 
-                 m.LR[2] * (IQR.LR[1]/sqrt(n.LR[1])))/
+        c5 <- (median.LR[1] + median.LR[2])/2
+        c6 <- (median.LR[1] * n.LR[2] + median.LR[2] * n.LR[1])/sum(n.LR)        
+        c7 <- (median.LR[1] * IQR.LR[2] + median.LR[2] * IQR.LR[1])/sum(IQR.LR)      
+        c8 <- (median.LR[1] * (IQR.LR[2]/sqrt(n.LR[2])) + 
+                 median.LR[2] * (IQR.LR[1]/sqrt(n.LR[1])))/
                ((IQR.LR[1]/sqrt(n.LR[1]))+(IQR.LR[2]/sqrt(n.LR[2])))
-        C <- c(c1, c2, c3, c4,c5,c6)
+        C <- c(c1, c2, c3, c4,c5,c6,c7,c8)
         
         Index <-LDAindex(as.numeric(as.factor(class)),proj.data,weight)
         Alpha <- t(a.proj.best)
