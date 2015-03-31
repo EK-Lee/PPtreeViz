@@ -49,10 +49,9 @@ PPtreeNode.Viz<-function(PPtreeOBJ,node.id,Rule){
       }
       proj.data<-c(as.matrix(origdata)%*%as.matrix(Alpha[TS[node.id,4],]))[sel.id]
       proj.class<-origclass[sel.id]
-      ..density.. <- NULL
       plot.data<-data.frame(proj.data = proj.data,origclass=proj.class)
       p1<- ggplot(plot.data, aes(x = proj.data,group=origclass))+
-                geom_histogram( aes(y = ..density.., fill = origclass))+
+                geom_histogram( aes(fill = origclass),position="stack")+
                 geom_vline(xintercept=cut.off[TS[node.id,4],Rule],linetype="longdash",lwd=1,col=2)
       vID <-1:p
       coef.data<-data.frame(vID = vID,coef=Alpha[TS[node.id,4],])
@@ -64,12 +63,15 @@ PPtreeNode.Viz<-function(PPtreeOBJ,node.id,Rule){
         xlab("variable ID")+ggtitle(paste("Node",node.id,sep=" "))+ylim(-y.max,y.max)
       gridExtra::grid.arrange(p2, p1,nrow=1)
    } else{
-      sel.id<-which(origclass==gName[TS[node.id,3]])
-      find.i<-which((TS[,2]==node.id | TS[,3]==node.id )& TS[,2]!=0)
+      #sel.id<-which(origclass==gName[TS[node.id,3]])
+      sel.id<-which(PP.classify(PPtreeOBJ,origdata,Rule)$predict.class==gName[TS[node.id,3]])
+      find.i<-TS[which((TS[,2]==node.id | TS[,3]==node.id )& TS[,2]!=0),4]
       proj.data<-c(as.matrix(origdata)%*%as.matrix(Alpha[find.i,]))[sel.id]
-      plot.data<-data.frame(proj.data)
-      p1<-ggplot(plot.data,aes(x=proj.data))+
-           geom_histogram(aes(y = ..density..),fill="gray40")+
+      proj.class<-origclass[sel.id]
+      plot.data<-data.frame(proj.data=proj.data,proj.class=proj.class)
+      
+      p1<-ggplot(plot.data,aes(x=proj.data,group=proj.class))+
+           geom_histogram(aes(fill=proj.class),position="stack")+
            ggtitle(paste("Node",node.id,": ",gName[TS[node.id,3]],sep=""))  
       gridExtra::grid.arrange(p1,nrow=1)     
    }

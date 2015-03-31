@@ -71,24 +71,24 @@ PDA.Tree<-function(origclass,origdata,weight = TRUE,lambda=0.1,...)
         m.LR <- tapply(proj.data, class, mean)
         temp.list<-sort.list(m.LR)
         m.LR<-m.LR[temp.list]
-        sd.LR <- tapply(proj.data, class, sd)[temp.list]
-        IQR.LR <- tapply(proj.data, class, IQR)[temp.list]
-        median.LR <- tapply(proj.data, class, median)[temp.list]
-        n.LR <- table(class)[temp.list]
+      sd.LR <- tapply(proj.data, class, function(x) ifelse(length(x)>1,sd(x),0))[temp.list]
+      IQR.LR <- tapply(proj.data, class, function(x) ifelse(length(x)>1,IQR(x),0))[temp.list]
+      median.LR <- tapply(proj.data, class, median)[temp.list]
+      n.LR <- table(class)[temp.list]
         
-        c1 <- (m.LR[1] + m.LR[2])/2
-        c2 <- (m.LR[1] * n.LR[2] + m.LR[2] * n.LR[1])/sum(n.LR)
-        c3 <- (m.LR[1] * sd.LR[2] + m.LR[2] * sd.LR[1])/sum(sd.LR)
-        c4 <- (m.LR[1] * sd.LR[2]/sqrt(n.LR[2]) + 
-                 m.LR[2] * sd.LR[1]/sqrt(n.LR[1]))/
-                 (sd.LR[1]/sqrt(n.LR[1])+sd.LR[2]/sqrt(n.LR[2]))
-        c5 <- (median.LR[1] + median.LR[2])/2
-        c6 <- (median.LR[1] * n.LR[2] + median.LR[2] * n.LR[1])/sum(n.LR)        
-        c7 <- (median.LR[1] * IQR.LR[2] + median.LR[2] * IQR.LR[1])/sum(IQR.LR)      
-        c8 <- (median.LR[1] * (IQR.LR[2]/sqrt(n.LR[2])) + 
-                   median.LR[2] * (IQR.LR[1]/sqrt(n.LR[1])))/
-                 ((IQR.LR[1]/sqrt(n.LR[1]))+(IQR.LR[2]/sqrt(n.LR[2])))
-        C <- c(c1, c2, c3, c4,c5,c6,c7,c8)
+      c1 <- (m.LR[1] + m.LR[2])/2
+      c2 <- (m.LR[1] * n.LR[2] + m.LR[2] * n.LR[1])/sum(n.LR)
+      c3 <- ifelse(sum(sd.LR==0)!=0,c1,(m.LR[1] * sd.LR[2] + m.LR[2] * sd.LR[1])/sum(sd.LR))
+      c4 <-  ifelse(sum(sd.LR==0)!=0,c2,(m.LR[1] * sd.LR[2]/sqrt(n.LR[2]) + 
+               m.LR[2] * sd.LR[1]/sqrt(n.LR[1]))/
+               (sd.LR[1]/sqrt(n.LR[1])+sd.LR[2]/sqrt(n.LR[2])))
+      c5 <- (median.LR[1] + median.LR[2])/2
+      c6 <- (median.LR[1] * n.LR[2] + median.LR[2] * n.LR[1])/sum(n.LR)    
+      c7 <- ifelse(sum(IQR.LR==0)!=0,c5,(median.LR[1] * IQR.LR[2] + median.LR[2] * IQR.LR[1])/sum(IQR.LR))      
+      c8 <- ifelse(sum(IQR.LR==0)!=0,c6,(median.LR[1] * (IQR.LR[2]/sqrt(n.LR[2])) + 
+                 median.LR[2] * (IQR.LR[1]/sqrt(n.LR[1])))/
+               ((IQR.LR[1]/sqrt(n.LR[1]))+(IQR.LR[2]/sqrt(n.LR[2]))))
+      C <- c(c1, c2, c3, c4,c5,c6,c7,c8)
         Index <-PDAindex(as.numeric(as.factor(class)),proj.data,weight,lambda)
 
         Alpha <- t(a.proj.best)
