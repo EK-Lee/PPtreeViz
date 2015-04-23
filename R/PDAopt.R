@@ -20,7 +20,8 @@
 #' @examples
 #' data(iris)
 #' PDA.proj.result <- PDAopt(iris[,5],iris[,1:4],weight=TRUE,q=2,lambda=0.1)
-#' PDA.proj.result
+#' PDA.proj.result$indexbest
+#' PDA.proj.result$projbest
 PDAopt<-function(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...){ 
    data.std<-apply(origdata,2,function(x) (x-mean(x))/ifelse(sd(x)==0,1,sd(x)))
    
@@ -49,9 +50,9 @@ PDAopt<-function(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...){
    }
    
    I<-diag(rep(1,p))
-   B.t<-(1-lambda)*B
-   WB.t<-(1-lambda)*(W+B); diag(WB.t)<-diag(W+B)
-   opt<-eigen(MASS::ginv(WB.t)%*%B.t)
+   W.t<-(1-lambda)*W; diag(W.t)<-diag(W)
+   WB.t<-W.t+B
+   opt<-eigen(MASS::ginv(WB.t)%*%B)
   
    optVector<-matrix(as.numeric(opt$vectors[,1:q]),ncol=q)
    proj.data<-data.std%*%optVector

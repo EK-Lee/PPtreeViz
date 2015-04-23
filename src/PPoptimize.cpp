@@ -109,7 +109,7 @@ double LDAindex(IntegerVector origclass, NumericMatrix origdata,
    NumericVector allmean(q);
    NumericMatrix W(q,q),WB(q,q),gsum(q,g);        
    NumericMatrix projdata(n,q);
-   if(p1!=p){
+   if(p1!=p || p1 ==1){
       projdata = origdata; 
    } else{
       for(int i=0; i<n; i++){
@@ -210,9 +210,9 @@ double PDAindex(IntegerVector origclass, NumericMatrix origdata,
                          (origdata(i,j2)-gsum(j2,l)/gn(l)))/gn(l)*gn1;
 
               temp2 = (1-lambda)*((origdata(i,j1)-gsum(j1,l)/gn(l))*
-                           (origdata(i,j2)-gsum(j2,l)/gn(l))+
+                           (origdata(i,j2)-gsum(j2,l)/gn(l)))+
                               (gsum(j1,l)/gn(l)-allmean(j1))*
-                              (gsum(j2,l)/gn(l)-allmean(j2)))/gn(l)*gn1;
+                              (gsum(j2,l)/gn(l)-allmean(j2))/gn(l)*gn1;
             } else{
               temp1 = ((origdata(i,j1)-gsum(j1,l)/gn(l))*
                          (origdata(i,j2)-gsum(j2,l)/gn(l)))/gn(l)*gn1;
@@ -232,7 +232,7 @@ double PDAindex(IntegerVector origclass, NumericMatrix origdata,
 
    NumericMatrix Wt(q,p),WBt(q,p);    
    NumericMatrix Wtt(q,q),WBtt(q,q); 
-   if(p1!=p){
+   if(p1!=p || p1 ==1){
       Wtt=W;
       WBtt=WB;
    } else{
@@ -295,7 +295,7 @@ NumericMatrix proj=NumericMatrix(0),bool weight=true,int r=1){
    NumericVector allmean(q);
    NumericMatrix gsum(q,g);
    NumericMatrix projdata(n,q);
-   if(p1!=p){
+   if(p1!=p || p1 ==1){
       projdata = origdata; 
    } else{
       for(int i=0; i<n; i++){
@@ -359,7 +359,7 @@ NumericVector proj=NumericVector(0)){
    double index=0,tempindex;
    NumericVector projdata(n);
 
-   if(p1!=p){
+   if(p1!=p || p1 ==1){
       projdata = origdata(_,0);
    } else{
       for(int i=0; i<n; i++){
@@ -422,7 +422,7 @@ NumericVector proj=NumericVector(0)){
    double index=0,tempindex;
    NumericVector projdata(n);
 
-   if(p1!=p){
+   if(p1!=p || p1 ==1){
       projdata = origdata(_,0);
    } else{
       for(int i=0; i<n; i++){

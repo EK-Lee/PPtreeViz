@@ -28,11 +28,11 @@ PPopt.Viz<-function(PPoptOBJ){
       coef.data<-data.frame(vID,coef)
       bin.width<-ifelse(p>100,1,0.1)
       y.max<-max(c(abs(coef.data$coef),1/sqrt(p)))
-      
-      p2<-ggplot(coef.data,aes(x=vID,y=coef))+
-          geom_bar(stat="identity",width=bin.width)+
+      y.min<- -y.max
+      p2<-ggplot(coef.data,aes(x=vID,y=coef))+        
+          geom_segment(aes(yend=0,xend=vID,width=0.1))+
           geom_hline(yintercept=0)+
-          ylim(-y.max,y.max) +
+          ylim(y.min,y.max) +
           xlab("variable ID")+
           ggtitle("Coefficients of Best Projection")
       gridExtra::grid.arrange(p2,p1,nrow=1)   
@@ -48,7 +48,7 @@ PPopt.Viz<-function(PPoptOBJ){
                y.max<-max(c(abs(coef.data$coef),1/sqrt(p)))
 
                plot.list[[list.id]]<-ggplot(coef.data,aes(x=vID,y=coef))+
-                                     geom_bar(stat="identity",width=bin.width)+
+                                     geom_segment(aes(yend=0,xend=vID,width=0.1))+
                                      geom_hline(yintercept=0)+ 
                                      xlab("variable ID")+ylim(-y.max,y.max)+
                                      ggtitle(paste(

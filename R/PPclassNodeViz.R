@@ -61,7 +61,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule){
       y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
       
       p2<-ggplot(coef.data,aes(x=vID,y=coef))+
-          geom_bar(stat="identity",width=bin.width)+
+          geom_segment(aes(yend=0,xend=vID,width=0.1))+
           geom_hline(yintercept=0)+ 
           geom_hline(yintercept=c(-1,1)*1/sqrt(ncol(origdata)),
                      col=2,linetype="dashed")+

@@ -116,7 +116,7 @@ PPregNode.Viz<-function(PPtreeregOBJ,node.id,Rule){
       bin.width<-ifelse(p>100,1,0.1)
       y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))     
       p2<-ggplot(coef.data,aes(x=vID,y=coef))+
-          geom_bar(stat="identity",width=bin.width)+
+          geom_segment(aes(yend=0,xend=vID,width=0.1))+        
           geom_hline(yintercept=0)+ 
           geom_hline(yintercept=c(-1,1)*1/sqrt(ncol(origdata)),
                      col=2,linetype="dashed")+        
@@ -127,7 +127,7 @@ PPregNode.Viz<-function(PPtreeregOBJ,node.id,Rule){
    } else{
       sel.id<-which(PP.classify(PPtreeOBJ,origdata,Rule)$predict.class==
                       gName[TS[node.id,3]])
-      Y<-PPtreeregOBJ$origY
+      Yorig<-PPtreeregOBJ$origY
       proj.data<-rep(1,length(Y))
       proj.data<-c(as.matrix(origdata)%*%
                      as.matrix(Alpha[which((TS[,2]!=0&TS[,3]==node.id)|
@@ -135,9 +135,9 @@ PPregNode.Viz<-function(PPtreeregOBJ,node.id,Rule){
 #      predY<-PPreg.predict(PPtreeregOBJ,origdata)$predict.Y
       coef<-lm(Y[sel.id]~proj.data[sel.id])$coef
       predY<-proj.data
-      pred.data<-predY[sel.id];Y<-Y[sel.id]
+      pred.data<-predY[sel.id];Y=Yorig[sel.id]
       plot.data1<-data.frame(pred.data,Y)
-      pred.data<-predY[-sel.id];Y<-Y[-sel.id]
+      pred.data<-predY[-sel.id];Y=Yorig[-sel.id]
       plot.data2<-data.frame(pred.data,Y)     
       p1<- ggplot()+
                 geom_point(data=plot.data2,
@@ -147,11 +147,29 @@ PPregNode.Viz<-function(PPtreeregOBJ,node.id,Rule){
                            col=4,linetype="dashed")+
 #                geom_abline(intercept=0,slope=1,lwd=1,col=2)+       
                 geom_abline(intercept=coef[1],slope=coef[2],col=2,linetype="dashed")+       
+                xlab("Projected X")+ylab("Observed Y")+
+                ggtitle(paste("Node",node.id,": ",
+                              round(PPtreeregOBJ$mean.G[TS[node.id,3]],3),
+                             "(",round(PPtreeregOBJ$sd.G[TS[node.id,3]],3),")",
+                             sep=""))   
+      predY<-PPreg.predict(PPtreeregOBJ,origdata)$predict.Y
+      pred.data<-predY[sel.id];Y=Yorig[sel.id]
+      plot.data3<-data.frame(pred.data,Y)
+      pred.data<-predY[-sel.id];Y=Yorig[-sel.id]
+      plot.data4<-data.frame(pred.data,Y)     
+
+      p2<- ggplot()+
+                geom_point(data=plot.data4,
+                           aes(x=pred.data,y=Y),col="grey50",size=1.3)+
+                geom_point(data=plot.data3,aes(x=pred.data,y=Y))+
+                geom_hline(yintercept=PPtreeregOBJ$mean.G[TS[node.id,3]],
+                           col=4,linetype="dashed")+
+                geom_abline(intercept=0,slope=1,lwd=1,col=2)+       
                 xlab("Fitted Y")+ylab("Observed Y")+
                 ggtitle(paste("Node",node.id,": ",
                               round(PPtreeregOBJ$mean.G[TS[node.id,3]],3),
                              "(",round(PPtreeregOBJ$sd.G[TS[node.id,3]],3),")",
-                             sep=""))       
-      gridExtra::grid.arrange(p1,nrow=1)     
+                             sep="")) 
+      gridExtra::grid.arrange(p1,p2,nrow=1)     
    }
 }
