@@ -78,36 +78,64 @@ NumericMatrix NormalizeProj(NumericMatrix proj){
    return normproj;
  
 }
-
+//' LDA PP index
+//' 
+//' Calculate LDA projection pursuit index value
+//' @usage LDAindex(origclass,origdata,proj,weight=TRUE)
+//' @param origclass class information vector
+//' @param origdata data matrix without class information  
+//' @param proj projection matrix 
+//' @param weight weight flag in LDA
+//' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
+//' Projection Pursuit for exploratory supervised classification, 
+//' Journal of Computational and Graphical statistics, 14(4):831-846.
+//' @export
+//' @keywords projection pursuit
+//' @examples
+//' data(iris)
+//' LDAindex(iris[,5],as.matrix(iris[,1:4]))
+//' 
 // [[Rcpp::export]]
-
-double LDAindex(IntegerVector projclass, NumericMatrix projdata, bool weight=true){
+double LDAindex(IntegerVector origclass, NumericMatrix origdata, 
+        NumericMatrix proj=NumericMatrix(0),bool weight=true){
 
    double index;
-   int n=projdata.nrow(),p=projdata.ncol();
+   int n=origdata.nrow(),p=origdata.ncol(),q=proj.ncol(),p1=proj.nrow();
    Environment base("package:base");
    Function table=base["table"];
-   NumericVector gn=table(projclass);
+   NumericVector gn=table(origclass);
    int g=gn.size();  
-   NumericMatrix W(p,p),WB(p,p),gsum(p,g);
-   NumericVector allmean(p);
-   
+   if(p1!=p){ q = p;}
+   NumericVector allmean(q);
+   NumericMatrix W(q,q),WB(q,q),gsum(q,g);        
+   NumericMatrix projdata(n,q);
+   if(p1!=p){
+      projdata = origdata; 
+   } else{
+      for(int i=0; i<n; i++){
+         for(int j=0; j<q; j++){
+            for(int k=0; k<p; k++){
+                 projdata(i,j) += origdata(i,k)*proj(k,j);
+            }
+         }
+      }
+   }
    for(int i=0;i<n;i++){
-      for(int k=0;k<p;k++){
+      for(int k=0;k<q;k++){
          allmean(k) += projdata(i,k)/n;
-         gsum(k,(projclass(i)-1)) += projdata(i,k);
+         gsum(k,(origclass(i)-1)) += projdata(i,k);
       }
    }
 
    for(int i=0; i<n; i++){
-      int l = projclass[i]-1;
+      int l = origclass[i]-1;
       double gn1;
       if(weight){
          gn1 = gn(l);
       } else{
          gn1 = n/g; 
       }
-      for(int j1=0;j1<p;j1++){
+      for(int j1=0;j1<q;j1++){
          for(int j2=0;j2<=j1;j2++) {
             W(j1,j2) += ((projdata(i,j1)-gsum(j1,l)/gn(l))*
                          (projdata(i,j2)-gsum(j2,l)/gn(l)))/gn(l)*gn1;
@@ -125,27 +153,49 @@ double LDAindex(IntegerVector projclass, NumericMatrix projdata, bool weight=tru
    index =1.0-as<double>(det(wrap(W)))/as<double>(det(wrap(WB)));
    return index;
 }
+//' PDA PP index 
+//' 
+//' Calculate PDA projection pursuit index value 
+//' @usage PDAindex(origclass,origdata,proj,weight=TRUE,lambda=0.1)
+//' @param origclass class information vector
+//' @param origdata data matrix without class information  
+//' @param proj projection matrix 
+//' @param weight weight flag in PDA
+//' @param lambda lambda in PDA index
+//' @references Lee, EK., Cook, D.(2010) 
+//' A projection pursuit index for large p small n data, 
+//' Statistics and Computing, 20:381-392.
+//' @export
+//' @keywords projection pursuit
+//' @examples
+//' data(iris)
+//' PDAindex(iris[,5],as.matrix(iris[,1:4]),lambda=0.2)
+//' 
+//' 
 // [[Rcpp::export]]
-
-double PDAindex(IntegerVector projclass, NumericMatrix projdata,bool weight=true,double lambda=0.1){
+double PDAindex(IntegerVector origclass, NumericMatrix origdata,
+        NumericMatrix proj = NumericMatrix(0) ,bool weight=true,double lambda=0.1){
 
    double index;
-   int n=projdata.nrow(),p=projdata.ncol();
+   int n=origdata.nrow(),p=origdata.ncol(),q=proj.ncol(),p1=proj.nrow();
    Environment base("package:base");
-   Function table = base["table"];
-   NumericVector gn=table(projclass);
-   int g=gn.size();   
-   NumericMatrix W(p,p),WB(p,p),gsum(p,g),normdata(n,p);
+   Function table=base["table"];
+   NumericVector gn=table(origclass);
+   int g=gn.size();  
+   NumericMatrix W(p,p),WB(p,p),gsum(p,g);
+   NumericVector allmean(p);
    
-   normdata = NormalizeD(projdata);
-   for(int i=0; i<n; i++){
+     if(p1!=p){ q = p;}
+   for(int i=0;i<n;i++){
       for(int k=0;k<p;k++){
-        gsum(k,(projclass(i)-1)) += normdata(i,k);
+         allmean(k) += origdata(i,k)/n;
+         gsum(k,(origclass(i)-1)) += origdata(i,k);
       }
    }
-   
+
+
    for(int i=0; i<n; i++){
-      int l = projclass[i]-1;
+      int l = origclass[i]-1;
       double gn1;
       if(weight){
          gn1 = gn(l);
@@ -154,55 +204,124 @@ double PDAindex(IntegerVector projclass, NumericMatrix projdata,bool weight=true
       }
       for(int j1=0;j1<p;j1++){
          for(int j2=0; j2<=j1; j2++) {
-            W(j1,j2) += (1-lambda)*(normdata(i,j1)-gsum(j1,l)/gn(l))*
-                                   (normdata(i,j2)-gsum(j2,l)/gn(l))/gn(l)*gn1;    
-            W(j2,j1) = W(j1,j2);
-            double temp = ((1-lambda)*(normdata(i,j1)-gsum(j1,l)/gn(l))*
-                                     (normdata(i,j2)-gsum(j2,l)/gn(l))+
-                               (gsum(j1,l)/gn(l))*(gsum(j2,l)/gn(l)))/gn(l)*gn1; 
-            WB(j1,j2) += temp;
+           double temp1,temp2;
+            if(j1!=j2){
+              temp1 =(1-lambda)* ((origdata(i,j1)-gsum(j1,l)/gn(l))*
+                         (origdata(i,j2)-gsum(j2,l)/gn(l)))/gn(l)*gn1;
+
+              temp2 = (1-lambda)*((origdata(i,j1)-gsum(j1,l)/gn(l))*
+                           (origdata(i,j2)-gsum(j2,l)/gn(l))+
+                              (gsum(j1,l)/gn(l)-allmean(j1))*
+                              (gsum(j2,l)/gn(l)-allmean(j2)))/gn(l)*gn1;
+            } else{
+              temp1 = ((origdata(i,j1)-gsum(j1,l)/gn(l))*
+                         (origdata(i,j2)-gsum(j2,l)/gn(l)))/gn(l)*gn1;
+
+              temp2 = ((origdata(i,j1)-gsum(j1,l)/gn(l))*
+                           (origdata(i,j2)-gsum(j2,l)/gn(l))+
+                              (gsum(j1,l)/gn(l)-allmean(j1))*
+                              (gsum(j2,l)/gn(l)-allmean(j2)))/gn(l)*gn1;              
+            }  
+            W(j1,j2) += temp1;  
+            WB(j1,j2) += temp2;
+            W(j2,j1) = W(j1,j2);            
             WB(j2,j1) = WB(j1,j2);
          }
       }      
    }
-   for(int j=0; j<p; j++){
-      W(j,j) = W(j,j)+ n*lambda;
-      WB(j,j) = WB(j,j)+ n*lambda;  
+
+   NumericMatrix Wt(q,p),WBt(q,p);    
+   NumericMatrix Wtt(q,q),WBtt(q,q); 
+   if(p1!=p){
+      Wtt=W;
+      WBtt=WB;
+   } else{
+
+      for(int i=0;i<p;i++){
+         for(int j=0; j<q; j++){
+            for(int k=0;k<p;k++){
+               Wt(j,i) +=W(k,i)*proj(k,j);
+               WBt(j,i) +=WB(k,i)*proj(k,j);               
+            }
+         }
+      }
+    
+      for(int i=0;i<q;i++){
+         for(int j=0; j<q; j++){
+            for(int k=0;k<p;k++){
+               Wtt(i,j) +=Wt(i,k)*proj(k,j);
+               WBtt(i,j) +=WBt(i,k)*proj(k,j);               
+            }
+         }
+      }      
    }
+   
    Function det = base["det"];
-   index =1.0-as<double>(det(wrap(W)))/as<double>(det(wrap(WB)));
+   index =1.0-as<double>(det(wrap(Wtt)))/as<double>(det(wrap(WBtt)));
     
    return index;
 }
-
+//' Lr PP index
+//' 
+//' Calculate Lr projection pursuit index value
+//' @usage Lrindex(origclass,origdata,proj,weight=TRUE,r=1)
+//' @param origclass class information vector
+//' @param origdata data matrix without class information  
+//' @param proj projection matrix 
+//' @param weight weight flag in Lr index
+//' @param r r in Lr index
+//' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
+//' Projection Pursuit for exploratory supervised classification, 
+//' Journal of Computational and Graphical statistics, 14(4):831-846.
+//' @export
+//' @keywords projection pursuit
+//' @examples
+//' data(iris)
+//' Lrindex(iris[,5],as.matrix(iris[,1:4]),r=1)
+//' 
 // [[Rcpp::export]]
-double Lrindex(IntegerVector projclass, NumericMatrix projdata,bool weight=true,int r=1){
+
+double Lrindex(IntegerVector origclass, NumericMatrix origdata,
+NumericMatrix proj=NumericMatrix(0),bool weight=true,int r=1){
  
    double index,B=0,W=0;
-   int n=projdata.nrow(),p=projdata.ncol();
+   int n=origdata.nrow(),p=origdata.ncol(),q=proj.ncol(),p1=proj.nrow();
    Environment base("package:base");
    Function table = base["table"];
-   NumericVector gn=table(projclass);
+   NumericVector gn=table(origclass);
    int g=gn.size();   
-   NumericMatrix gsum(p,g);
-   NumericVector allmean(p);
-   
-/*  projdata = NormalizeD(projdata); */
+
+   if(p1!=p){ q = p;}
+   NumericVector allmean(q);
+   NumericMatrix gsum(q,g);
+   NumericMatrix projdata(n,q);
+   if(p1!=p){
+      projdata = origdata; 
+   } else{
+      for(int i=0; i<n; i++){
+         for(int j=0; j<q; j++){
+            for(int k=0; k<p; k++){
+                 projdata(i,j) += origdata(i,k)*proj(k,j);
+            }
+         }
+      }
+   }
+
    for(int i=0; i<n; i++){
-      for(int k=0;k<p;k++){
+      for(int k=0;k<q;k++){
          allmean(k) = allmean(k)+ projdata(i,k)/n;
-         gsum(k,(projclass(i)-1)) += projdata(i,k);
+         gsum(k,(origclass(i)-1)) += projdata(i,k);
       }
    }
    for(int i=0; i<n; i++){
-      int l = projclass(i)-1;
+      int l = origclass(i)-1;
       double gn1;
       if(weight){
          gn1 = gn(l);
       } else{
          gn1 = n/g; 
       }         
-      for(int j=0;j<p;j++){
+      for(int j=0;j<q;j++){
          W = W+ pow(pow((projdata(i,j)-gsum(j,l)/gn(l)),2*r),0.5)/gn(l)*gn1;
          B = B+ pow(pow((gsum(j,l)/gn(l)-allmean(j)),2*r),0.5)/gn(l)*gn1;
       }
@@ -213,17 +332,44 @@ double Lrindex(IntegerVector projclass, NumericMatrix projdata,bool weight=true,
    index = 1-W/WB;
    return index;
 }
+
+//' GINI PP index
+//' 
+//' Calculate GINI projection pursuit index value
+//' @usage GINIindex1D(origclass,origdata,proj)
+//' @param origclass class information vector
+//' @param origdata data matrix without class information  
+//' @param proj projection matrix
+//' @export
+//' @keywords projection pursuit
+//' @examples
+//' data(iris)
+//' GINIindex1D(iris[,5],as.matrix(iris[,1,drop=FALSE]))
 // [[Rcpp::export]]
 
-double GINIindex1D(IntegerVector projclass, NumericVector projdata){
+double GINIindex1D(IntegerVector origclass, NumericMatrix origdata,
+NumericVector proj=NumericVector(0)){
  
    Environment base("package:base");
    Function table = base["table"];
-   NumericVector gn=table(projclass);
-   int g=gn.size(), n = projclass.size();
+   NumericVector gn=table(origclass);
+   int g=gn.size();
+   int n=origdata.nrow(),p=origdata.ncol(),p1=proj.size();
    double n1,n2;
    double index=0,tempindex;
-   List VecSortdata =  VecSort(projdata,projclass);
+   NumericVector projdata(n);
+
+   if(p1!=p){
+      projdata = origdata(_,0);
+   } else{
+      for(int i=0; i<n; i++){
+         for(int k=0; k<p; k++){
+              projdata(i) += origdata(i,k)*proj(k);
+         }
+      }
+   } 
+
+   List VecSortdata =  VecSort(projdata,origclass);
    NumericVector sortdata = as<NumericVector>(VecSortdata["sortID"]);
    IntegerVector sortclass = as<IntegerVector>(VecSortdata["sortAux"]);
    IntegerVector part1,part2,temptable1,temptable2;
@@ -249,18 +395,44 @@ double GINIindex1D(IntegerVector projclass, NumericVector projdata){
    return index;
 }
 
-
+//' ENTROPY PP index 
+//' 
+//' Calculate ENTROPY projection pursuit index value
+//' @usage ENTROPYindex1D(origclass,origdata,proj)
+//' @param origclass class information vector
+//' @param origdata data matrix without class information  
+//' @param proj projection matrix
+//' @export
+//' @keywords projection pursuit
+//' @examples
+//' data(iris)
+//' ENTROPYindex1D(iris[,5],as.matrix(iris[,1,drop=FALSE]))
 // [[Rcpp::export]]
 
-double ENTROPYindex1D(IntegerVector projclass, NumericVector projdata){
+
+double ENTROPYindex1D(IntegerVector origclass, NumericMatrix origdata,
+NumericVector proj=NumericVector(0)){
  
    Environment base("package:base");
    Function table = base["table"];
-   NumericVector gn=table(projclass);
-   int g=gn.size(), n = projclass.size();
+   NumericVector gn=table(origclass);
+   int g=gn.size();
+   int n=origdata.nrow(),p=origdata.ncol(),p1=proj.size();
    double n1,n2;
    double index=0,tempindex;
-   List VecSortdata =  VecSort(projdata,projclass);
+   NumericVector projdata(n);
+
+   if(p1!=p){
+      projdata = origdata(_,0);
+   } else{
+      for(int i=0; i<n; i++){
+         for(int k=0; k<p; k++){
+              projdata(i) += origdata(i,k)*proj(k);
+         }
+      }
+   } 
+
+   List VecSortdata =  VecSort(projdata,origclass);
    NumericVector sortdata = as<NumericVector>(VecSortdata["sortID"]);
    IntegerVector sortclass = as<IntegerVector>(VecSortdata["sortAux"]);
    IntegerVector part1,part2,temptable1,temptable2;
@@ -294,6 +466,35 @@ double ENTROPYindex1D(IntegerVector projclass, NumericVector projdata){
    return index;
 }
 
+//' PP optimization using various PP indices
+//' 
+//' Find the q-dim optimal projection using various projectin pursuit indices with class information
+//' @usage PPopt(origclass,origdata,q=1,PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
+//'              energy=0,cooling=0.999,TOL=0.0001,maxiter = 50000)
+//' @param origclass class information vector
+//' @param origdata data matrix without class information
+//' @param q dimension of projection matrix
+//' @param PPmethod method for projection pursuit; "LDA", "PDA", "Lr", "GINI", and "ENTROPY"
+//' @param weight weight flag in LDA, PDA and Lr index
+//' @param r r in Lr index
+//' @param lambda lambda in PDA index
+//' @param energy energy parameter
+//' @param cooling cooling parameter
+//' @param TOL tolerance
+//' @param maxiter number of maximum iteration
+//' @return indexbest maximum LDA index value
+//' @return projbest optimal q-dim projection matrix
+//' @return origclass original class information vector
+//' @return origdata  original data matrix  without class information
+//' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
+//' Projection Pursuit for exploratory supervised classification, 
+//' Journal of Computational and Graphical statistics, 14(4):831-846.
+//' @export
+//' @keywords projection pursuit
+//' @examples
+//' data(iris)
+//' PP.proj.result <- PPopt(iris[,5],as.matrix(iris[,1:4]))
+//' PP.proj.result
 // [[Rcpp::export]]
 List PPopt(IntegerVector origclass, NumericMatrix origdata,int q=1, std::string PPmethod="LDA", 
            bool weight = true, int r=1,double lambda=0.1, 
@@ -306,31 +507,31 @@ List PPopt(IntegerVector origclass, NumericMatrix origdata,int q=1, std::string 
    NumericMatrix projbest(p,q);
    double indexbest=0,newindex=0;
    if((PPmethod=="GINI" || PPmethod=="ENTROPY") && q>1)
-   {  /*printf("GINI and ENTROPY PPmethod is only for 1D projection. Use q=1\n"); */
+   {  
       return Rcpp::List::create(Rcpp::Named("indexbest") = 0,
                              Rcpp::Named("projbest") = 0);
    } else {  
       if(PPmethod=="LDA"){
-         indexbest = LDAindex(origclass,origdata,weight);
+         indexbest = LDAindex(origclass,origdata,NumericMatrix(0),weight);
       } else if(PPmethod=="Lr"){
-         indexbest = Lrindex(origclass,origdata,weight,r);
+         indexbest = Lrindex(origclass,origdata,NumericMatrix(0),weight,r);
       } else if(PPmethod=="PDA"){
-         indexbest = PDAindex(origclass,origdata,weight,lambda);  
+         indexbest = PDAindex(origclass,origdata,NumericMatrix(0),weight,lambda);  
       } else if(PPmethod=="GINI"){
-         NumericVector tempdata;
          double tempindex=0;
          for(int i=0; i<p; i++){
-            tempdata = origdata(_,i);
-            tempindex = GINIindex1D(origclass,tempdata);  
+            NumericVector tempproj(p);
+            tempproj(i) = 1;
+            tempindex = GINIindex1D(origclass,origdata,tempproj);  
             if(indexbest<tempindex)
                 indexbest = tempindex;
          }        
       } else if(PPmethod=="ENTROPY"){
-         NumericVector tempdata;
          double tempindex=0;
          for(int i=0; i<p; i++){
-            tempdata = origdata(_,i);
-            tempindex = ENTROPYindex1D(origclass,tempdata);  
+            NumericVector tempproj(p);
+            tempproj(i) = 1;
+            tempindex = ENTROPYindex1D(origclass,origdata,tempproj);  
             if(indexbest<tempindex)
                 indexbest = tempindex;
          } 
@@ -355,19 +556,19 @@ List PPopt(IntegerVector origclass, NumericMatrix origdata,int q=1, std::string 
       }
   
       if(PPmethod=="LDA"){
-         indexbest = LDAindex(origclass,projdata,weight);
+         indexbest = LDAindex(origclass,origdata,projbest,weight);
       } else if(PPmethod=="Lr"){
-         indexbest = Lrindex(origclass,projdata,weight,r);
+         indexbest = Lrindex(origclass,origdata,projbest,weight,r);
       } else if(PPmethod=="PDA"){
-         indexbest = PDAindex(origclass,projdata,weight,lambda);
+         indexbest = PDAindex(origclass,origdata,projbest,weight,lambda);
       } else if(PPmethod=="GINI"){
-         NumericVector tempdata;
-         tempdata = projdata(_,0);
-         indexbest = GINIindex1D(origclass,tempdata);        
+         /*NumericMatrix tempdata;
+         tempdata = projdata(_,0);*/
+         indexbest = GINIindex1D(origclass,origdata,projbest);        
       } else if(PPmethod=="ENTROPY"){
          NumericVector tempdata;
          tempdata = projdata(_,0);
-         indexbest = ENTROPYindex1D(origclass,tempdata);        
+         indexbest = ENTROPYindex1D(origclass,origdata,projbest);        
       }
    
       double temp=1;
@@ -398,19 +599,17 @@ List PPopt(IntegerVector origclass, NumericMatrix origdata,int q=1, std::string 
          }
       
          if(PPmethod=="LDA"){
-            newindex = LDAindex(origclass,projdata,weight);
+            newindex = LDAindex(origclass,origdata,projnew,weight);
          } else if(PPmethod=="Lr"){
-            newindex = Lrindex(origclass,projdata,weight,r);
+            newindex = Lrindex(origclass,origdata,projnew,weight,r);
          } else if(PPmethod=="PDA"){
-            newindex = PDAindex(origclass,projdata,weight,lambda);
+            newindex = PDAindex(origclass,origdata,projnew,weight,lambda);
          } else if(PPmethod=="GINI"){
-            NumericVector tempdata;
-            tempdata = projdata(_,0);
-            newindex = GINIindex1D(origclass,tempdata);        
+            NumericVector tempproj= projnew(_,0);
+            newindex = GINIindex1D(origclass,origdata,tempproj);        
          } else if(PPmethod=="ENTROPY"){
-            NumericVector tempdata;
-            tempdata = projdata(_,0);
-            newindex = ENTROPYindex1D(origclass,tempdata);        
+            NumericVector tempproj= projnew(_,0);
+            newindex = ENTROPYindex1D(origclass,origdata,tempproj);        
          }
       
          NumericVector prob = runif(1);

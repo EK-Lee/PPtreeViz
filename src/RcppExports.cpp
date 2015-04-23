@@ -7,112 +7,93 @@
 using namespace Rcpp;
 
 // LDAindex
-double LDAindex(IntegerVector projclass, NumericMatrix projdata, bool weight = true);
-RcppExport SEXP PPtreeViz_LDAindex(SEXP projclassSEXP, SEXP projdataSEXP, SEXP weightSEXP) {
+double LDAindex(IntegerVector origclass, NumericMatrix origdata, NumericMatrix proj, bool weight);
+RcppExport SEXP PPtreeViz_LDAindex(SEXP origclassSEXP, SEXP origdataSEXP, SEXP projSEXP, SEXP weightSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type projclass(projclassSEXP );
-        Rcpp::traits::input_parameter< NumericMatrix >::type projdata(projdataSEXP );
-        Rcpp::traits::input_parameter< bool >::type weight(weightSEXP );
-        double __result = LDAindex(projclass, projdata, weight);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type origclass(origclassSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type origdata(origdataSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type proj(projSEXP);
+    Rcpp::traits::input_parameter< bool >::type weight(weightSEXP);
+    __result = Rcpp::wrap(LDAindex(origclass, origdata, proj, weight));
+    return __result;
 END_RCPP
 }
 // PDAindex
-double PDAindex(IntegerVector projclass, NumericMatrix projdata, bool weight = true, double lambda = 0.1);
-RcppExport SEXP PPtreeViz_PDAindex(SEXP projclassSEXP, SEXP projdataSEXP, SEXP weightSEXP, SEXP lambdaSEXP) {
+double PDAindex(IntegerVector origclass, NumericMatrix origdata, NumericMatrix proj, bool weight, double lambda);
+RcppExport SEXP PPtreeViz_PDAindex(SEXP origclassSEXP, SEXP origdataSEXP, SEXP projSEXP, SEXP weightSEXP, SEXP lambdaSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type projclass(projclassSEXP );
-        Rcpp::traits::input_parameter< NumericMatrix >::type projdata(projdataSEXP );
-        Rcpp::traits::input_parameter< bool >::type weight(weightSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        double __result = PDAindex(projclass, projdata, weight, lambda);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type origclass(origclassSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type origdata(origdataSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type proj(projSEXP);
+    Rcpp::traits::input_parameter< bool >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    __result = Rcpp::wrap(PDAindex(origclass, origdata, proj, weight, lambda));
+    return __result;
 END_RCPP
 }
 // Lrindex
-double Lrindex(IntegerVector projclass, NumericMatrix projdata, bool weight = true, int r = 1);
-RcppExport SEXP PPtreeViz_Lrindex(SEXP projclassSEXP, SEXP projdataSEXP, SEXP weightSEXP, SEXP rSEXP) {
+double Lrindex(IntegerVector origclass, NumericMatrix origdata, NumericMatrix proj, bool weight, int r);
+RcppExport SEXP PPtreeViz_Lrindex(SEXP origclassSEXP, SEXP origdataSEXP, SEXP projSEXP, SEXP weightSEXP, SEXP rSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type projclass(projclassSEXP );
-        Rcpp::traits::input_parameter< NumericMatrix >::type projdata(projdataSEXP );
-        Rcpp::traits::input_parameter< bool >::type weight(weightSEXP );
-        Rcpp::traits::input_parameter< int >::type r(rSEXP );
-        double __result = Lrindex(projclass, projdata, weight, r);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type origclass(origclassSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type origdata(origdataSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type proj(projSEXP);
+    Rcpp::traits::input_parameter< bool >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< int >::type r(rSEXP);
+    __result = Rcpp::wrap(Lrindex(origclass, origdata, proj, weight, r));
+    return __result;
 END_RCPP
 }
 // GINIindex1D
-double GINIindex1D(IntegerVector projclass, NumericVector projdata);
-RcppExport SEXP PPtreeViz_GINIindex1D(SEXP projclassSEXP, SEXP projdataSEXP) {
+double GINIindex1D(IntegerVector origclass, NumericMatrix origdata, NumericVector proj);
+RcppExport SEXP PPtreeViz_GINIindex1D(SEXP origclassSEXP, SEXP origdataSEXP, SEXP projSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type projclass(projclassSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type projdata(projdataSEXP );
-        double __result = GINIindex1D(projclass, projdata);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type origclass(origclassSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type origdata(origdataSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type proj(projSEXP);
+    __result = Rcpp::wrap(GINIindex1D(origclass, origdata, proj));
+    return __result;
 END_RCPP
 }
 // ENTROPYindex1D
-double ENTROPYindex1D(IntegerVector projclass, NumericVector projdata);
-RcppExport SEXP PPtreeViz_ENTROPYindex1D(SEXP projclassSEXP, SEXP projdataSEXP) {
+double ENTROPYindex1D(IntegerVector origclass, NumericMatrix origdata, NumericVector proj);
+RcppExport SEXP PPtreeViz_ENTROPYindex1D(SEXP origclassSEXP, SEXP origdataSEXP, SEXP projSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type projclass(projclassSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type projdata(projdataSEXP );
-        double __result = ENTROPYindex1D(projclass, projdata);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type origclass(origclassSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type origdata(origdataSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type proj(projSEXP);
+    __result = Rcpp::wrap(ENTROPYindex1D(origclass, origdata, proj));
+    return __result;
 END_RCPP
 }
 // PPopt
-List PPopt(IntegerVector origclass, NumericMatrix origdata, int q = 1, std::string PPmethod = "LDA", bool weight = true, int r = 1, double lambda = 0.1, double energy = 0, double cooling = 0.999, double TOL = 0.0001, int maxiter = 50000);
+List PPopt(IntegerVector origclass, NumericMatrix origdata, int q, std::string PPmethod, bool weight, int r, double lambda, double energy, double cooling, double TOL, int maxiter);
 RcppExport SEXP PPtreeViz_PPopt(SEXP origclassSEXP, SEXP origdataSEXP, SEXP qSEXP, SEXP PPmethodSEXP, SEXP weightSEXP, SEXP rSEXP, SEXP lambdaSEXP, SEXP energySEXP, SEXP coolingSEXP, SEXP TOLSEXP, SEXP maxiterSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type origclass(origclassSEXP );
-        Rcpp::traits::input_parameter< NumericMatrix >::type origdata(origdataSEXP );
-        Rcpp::traits::input_parameter< int >::type q(qSEXP );
-        Rcpp::traits::input_parameter< std::string >::type PPmethod(PPmethodSEXP );
-        Rcpp::traits::input_parameter< bool >::type weight(weightSEXP );
-        Rcpp::traits::input_parameter< int >::type r(rSEXP );
-        Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP );
-        Rcpp::traits::input_parameter< double >::type energy(energySEXP );
-        Rcpp::traits::input_parameter< double >::type cooling(coolingSEXP );
-        Rcpp::traits::input_parameter< double >::type TOL(TOLSEXP );
-        Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP );
-        List __result = PPopt(origclass, origdata, q, PPmethod, weight, r, lambda, energy, cooling, TOL, maxiter);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< IntegerVector >::type origclass(origclassSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type origdata(origdataSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< std::string >::type PPmethod(PPmethodSEXP);
+    Rcpp::traits::input_parameter< bool >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< int >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type energy(energySEXP);
+    Rcpp::traits::input_parameter< double >::type cooling(coolingSEXP);
+    Rcpp::traits::input_parameter< double >::type TOL(TOLSEXP);
+    Rcpp::traits::input_parameter< int >::type maxiter(maxiterSEXP);
+    __result = Rcpp::wrap(PPopt(origclass, origdata, q, PPmethod, weight, r, lambda, energy, cooling, TOL, maxiter));
+    return __result;
 END_RCPP
 }

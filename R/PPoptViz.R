@@ -1,6 +1,6 @@
 #' Visualize PPopt
 #' 
-#' Visualize Projection pursuit optimization result result
+#' Visualize the result of projection pursuit optimization
 #' @usage PPopt.Viz(PPoptOBJ)
 #' @param PPoptOBJ result from LDAopt, PDAopt, and PPopt
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
@@ -19,45 +19,56 @@ PPopt.Viz<-function(PPoptOBJ){
    p<-ncol(PPoptOBJ$origdata)   
    vID <-1:p
    if(q==1){
-      ..density.. <- NULL
-      plot.data<-data.frame(proj.data = proj.data,origclass=PPoptOBJ$origclass)
-      p1<- ggplot(plot.data, aes(x = proj.data,group=origclass))+
-                geom_histogram( aes(y = ..density.., fill = origclass))
-
-      coef.data<-data.frame(vID = vID,coef=PPoptOBJ$projbest[,1])
+      ..density..<-NULL
+      origclass<-PPoptOBJ$origclass
+      plot.data<-data.frame(proj.data,origclass)
+      p1<-ggplot(plot.data,aes(x=proj.data,group=origclass))+
+                geom_histogram(aes(y=..density..,fill=origclass))
+      coef<-PPoptOBJ$projbest[,1]
+      coef.data<-data.frame(vID,coef)
       bin.width<-ifelse(p>100,1,0.1)
-      y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
+      y.max<-max(c(abs(coef.data$coef),1/sqrt(p)))
       
-      p2<-ggplot(coef.data,aes(x=vID,y=coef))+geom_bar(stat="identity",width=bin.width)+
-         geom_hline(yintercept=0) + ylim(-y.max,y.max) +
-        xlab("variable ID")+ggtitle("Coefficients of Best Projection")
-      gridExtra::grid.arrange(p2, p1,nrow=1)   
+      p2<-ggplot(coef.data,aes(x=vID,y=coef))+
+          geom_bar(stat="identity",width=bin.width)+
+          geom_hline(yintercept=0)+
+          ylim(-y.max,y.max) +
+          xlab("variable ID")+
+          ggtitle("Coefficients of Best Projection")
+      gridExtra::grid.arrange(p2,p1,nrow=1)   
    } else{
       plot.list<-list()
       list.id<-1
       for(i in 1:q){
          for(j in 1:q){
             if(i==j)
-            {  coef.data<-data.frame(vID = vID,coef=PPoptOBJ$projbest[,i])
+            {  coef<-PPoptOBJ$projbest[,i]
+               coef.data<-data.frame(vID,coef)
                bin.width<-ifelse(p>100,1,0.1)
-               y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
+               y.max<-max(c(abs(coef.data$coef),1/sqrt(p)))
 
                plot.list[[list.id]]<-ggplot(coef.data,aes(x=vID,y=coef))+
                                      geom_bar(stat="identity",width=bin.width)+
-                                     geom_hline(yintercept=0) + 
+                                     geom_hline(yintercept=0)+ 
                                      xlab("variable ID")+ylim(-y.max,y.max)+
-                                     ggtitle(paste("Coefficients of Best Projection - dim",as.character(i),sep=""))
-               list.id <- list.id+1
+                                     ggtitle(paste(
+                                        "Coefficients of Best Projection - dim",
+                                         as.character(i),sep=""))
+               list.id<-list.id+1
             } else
-            {  plot.data<-data.frame(x = proj.data[,j],y=proj.data[,i],origclass=PPoptOBJ$origclass)
-               plot.list[[list.id]] <- ggplot(plot.data,aes(x=x,y=y,color=origclass))+
-                                       geom_point() +
+            {  x<-proj.data[,j]
+               y<-proj.data[,i]
+               origclass<-PPoptOBJ$origclass
+               plot.data<-data.frame(x,y,origclass)
+               plot.list[[list.id]]<-ggplot(plot.data,aes(x=x,y=y,
+                                                          color=origclass))+
+                                       geom_point()+
                                        xlab(paste("dim",as.character(j)))+
                                        ylab(paste("dim",as.character(i)))                 
                list.id<-list.id+1 
             }
          }    
       }
-      do.call(grid.arrange, plot.list)
+      do.call(grid.arrange,plot.list)
    }
 }

@@ -1,17 +1,17 @@
 #' PP optimization using PDA index
 #' 
-#'  Find the q-dim optimal projection using PDA index for classification
-#' @usage PDAopt(origclass, origdata,q=1, weight=TRUE,lambda=0.1, ...) 
-#' @param origdata A training data  without class information
-#' @param origclass class information
+#'  Find the q-dim optimal projection using PDA projectin pursuit index
+#' @usage PDAopt(origclass,origdata,q=1,weight=TRUE,lambda=0.1, ...) 
+#' @param origclass class information vector
+#' @param origdata data matrix without class information
 #' @param q dimension of projection matrix
 #' @param weight weight flag using in PDA index
 #' @param lambda lambda in PDA index
 #' @param ... arguments to be passed to methods
-#' @return indexbest optimal value of PDA index value
-#' @return projbest optimal q-dim projection
-#' @return origclass class information
-#' @return origdata A training data  without class information
+#' @return indexbest maximum PDA index value
+#' @return projbest optimal q-dim projection matrix
+#' @return origclass original class information vector
+#' @return origdata  original data matrix  without class information
 #' @references Lee, EK., Cook, D.(2010) 
 #' A projection pursuit index for large p small n data, 
 #' Statistics and Computing, 20:381-392.
@@ -21,17 +21,19 @@
 #' data(iris)
 #' PDA.proj.result <- PDAopt(iris[,5],iris[,1:4],weight=TRUE,q=2,lambda=0.1)
 #' PDA.proj.result
-PDAopt <- function(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...) 
-{ 
-   origdata<-as.matrix(origdata)
+PDAopt<-function(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...){ 
+   data.std<-apply(origdata,2,function(x) (x-mean(x))/ifelse(sd(x)==0,1,sd(x)))
+   
+   data.std<-as.matrix(data.std)
+   
    class.table<-table(origclass)
    g<-length(class.table)
    class.name<-names(class.table)
-   p<-ncol(origdata)
-   n<-nrow(origdata)
-   mean.g<-matrix(apply(origdata,2,function(x) 
+   p<-ncol(data.std)
+   n<-nrow(data.std)
+   mean.g<-matrix(apply(data.std,2,function(x) 
                   tapply(x,origclass,mean, na.rm=TRUE)),ncol=p)
-   mean.all<-matrix(apply(origdata,2,mean),ncol=p)
+   mean.all<-matrix(apply(data.std,2,mean),ncol=p)
                    
    B<-matrix(0,ncol=p,nrow=p)
    W<-matrix(0,ncol=p,nrow=p)
@@ -39,21 +41,23 @@ PDAopt <- function(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...)
    for(i in 1:length(class.table)){
       sel.id<-which(origclass==class.name[i])
       temp.m1<-mean.g[i,]-mean.all
-      temp.m2<-origdata[sel.id,]-
+      temp.m2<-data.std[sel.id,]-
                  matrix(1,length(sel.id),ncol=1)%*%mean.g[i,,drop=FALSE]
       gn1<-ifelse(weight,length(sel.id),n/g)
-      B <- B+ gn1*t(temp.m1)%*%temp.m1
-      W <- W+ gn1*t(temp.m2)%*%temp.m2      
+      B<-B+gn1*t(temp.m1)%*%temp.m1
+      W<-W+gn1*t(temp.m2)%*%temp.m2/length(sel.id)      
    }
    
    I<-diag(rep(1,p))
-   W.t<-(1-lambda)*W+lambda*n*I
-   opt<-eigen(MASS::ginv(W.t)%*%B)
+   B.t<-(1-lambda)*B
+   WB.t<-(1-lambda)*(W+B); diag(WB.t)<-diag(W+B)
+   opt<-eigen(MASS::ginv(WB.t)%*%B.t)
   
    optVector<-matrix(as.numeric(opt$vectors[,1:q]),ncol=q)
-   proj.data<-origdata%*%optVector
-   optindex<-PDAindex(origclass,proj.data,weight,lambda)  
-   optobj<-list(indexbest=optindex,projbest=optVector,origclass = origclass,origdata= origdata)
+   proj.data<-data.std%*%optVector
+   optindex<-PDAindex(origclass,proj.data,optVector,weight,lambda=lambda)  
+   optobj<-list(indexbest=optindex,projbest=optVector,origclass = origclass,
+                origdata= origdata,data.std=data.std)
    class(optobj)<-append(class(optobj),"PPoptim")
    return(optobj)
 }
