@@ -185,12 +185,12 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
                      ((IQR.LR[1]/sqrt(n.LR[1]))+(IQR.LR[2]/sqrt(n.LR[2]))))
       sel.proj<-sort(proj.data[which(proj.data>quantile(proj.data,prob=0.25)& 
                                      proj.data<quantile(proj.data,prob=0.75))])
-      sel.n<-length(sel.proj)
-      temp.cut<-matrix((sel.proj[2:sel.n]+sel.proj[1:(sel.n-1)])/2,ncol=1)
-      c9<-sel.proj[sort.list(apply(temp.cut,1,function(x) 
-                                { temp<-table(class,proj.data>x[1]);
-                                  return(prod(temp[,1])+prod(temp[,2]))}))[1]]
-      C<-c(c1,c2,c3,c4,c5,c6,c7,c8,c9)
+#      sel.n<-length(sel.proj)
+#      temp.cut<-matrix((sel.proj[2:sel.n]+sel.proj[1:(sel.n-1)])/2,ncol=1)
+#      c9<-sel.proj[sort.list(apply(temp.cut,1,function(x) 
+#                                { temp<-table(class,proj.data>x[1]);
+#                                  return(prod(temp[,1])+prod(temp[,2]))}))[1]]
+      C<-c(c1,c2,c3,c4,c5,c6,c7,c8)
       Index<-a$indexbest
       Alpha<-t(a$projbest)
       IOindexR<-NULL
@@ -283,7 +283,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
    colnames(Tree.Struct)<-c("id","L.node.ID","R.F.node.ID","Coef.ID","Index")
    projbest.node<-Tree.final$projbest.node
    splitCutoff.node<-Tree.final$splitCutoff.node
-   colnames(splitCutoff.node)<-paste("Rule",1:9,sep="")
+   colnames(splitCutoff.node)<-paste("Rule",1:8,sep="")
    treeobj<-list(Tree.Struct=Tree.Struct,projbest.node=projbest.node, 
                  splitCutoff.node=splitCutoff.node,origclass=origclass,
                  origdata=origdata)

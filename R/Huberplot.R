@@ -9,6 +9,8 @@
 #' @param r r in Lr index
 #' @param lambda lambda in PDA index 
 #' @param opt.proj flag to show the best projection in the plot
+#' @param UserDefFtn  User defined index function
+#' @param ...  arguments to be passed to methods
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
 #' Projection Pursuit for exploratory supervised classification, 
 #' Journal of Computational and Graphical statistics, 14(4):831-846.
@@ -18,7 +20,7 @@
 #' data(iris)
 #' Huber.plot(iris[,1:2],iris[,5],PPmethod="LDA")
 Huber.plot<-function(origdata2D,origclass,PPmethod="LDA",
-                     weight=TRUE,r=1,lambda=0.5,opt.proj=TRUE){  
+                     weight=TRUE,r=1,lambda=0.5,opt.proj=TRUE,UserDefFtn=NULL,...){  
    index<-NULL
    best.proj<-NULL
    best.index<-0
@@ -37,8 +39,10 @@ Huber.plot<-function(origdata2D,origclass,PPmethod="LDA",
       } else if(PPmethod=="GINI"){
          newindex<-GINIindex1D(origclass,origdata2D,proj)          
       } else if(PPmethod=="ENTROPY"){
-        newindex <- ENTROPYindex1D(origclass,origdata2D,proj)
-      }
+        newindex<-ENTROPYindex1D(origclass,origdata2D,proj)
+      } else if(PPmethod=="UserDef"){
+        newindex<-UserDefFtn(proj.data)
+      } 
       index<-c(index,newindex)
    }
    sel.index<-which(index[1:360]>signif(max(index),6)-1.0E-6)

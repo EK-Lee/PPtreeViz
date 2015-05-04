@@ -101,8 +101,8 @@ print.PPtreeclass<-function(x,coef.print=FALSE,cutoff.print=FALSE,
                         PP.classify(PPtreeOBJ,sample.data.X, Rule=7, 
                                     sample.data.class)$predict.error,                 
                         PP.classify(PPtreeOBJ,sample.data.X, Rule=8, 
-                                    sample.data.class)$predict.error,
-                        PP.classify(PPtreeOBJ,sample.data.X, Rule=9, 
+#                                    sample.data.class)$predict.error,
+#                        PP.classify(PPtreeOBJ,sample.data.X, Rule=9, 
                                     sample.data.class)$predict.error)/
                         nrow(sample.data.X),nrow=1)               
    colnames(error.rate)<-colnames(cut.off)
