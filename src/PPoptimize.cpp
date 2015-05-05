@@ -78,9 +78,11 @@ NumericMatrix NormalizeProj(NumericMatrix proj){
    return normproj;
  
 }
+
 //' LDA PP index
 //' 
 //' Calculate LDA projection pursuit index value
+//' @title LDA PPindex
 //' @usage LDAindex(origclass,origdata,proj,weight=TRUE)
 //' @param origclass class information vector
 //' @param origdata data matrix without class information  
@@ -94,8 +96,10 @@ NumericMatrix NormalizeProj(NumericMatrix proj){
 //' @examples
 //' data(iris)
 //' LDAindex(iris[,5],as.matrix(iris[,1:4]))
-//' 
+//' @useDynLib PPtreeViz
+//' @importFrom Rcpp evalCpp
 // [[Rcpp::export]]
+
 double LDAindex(IntegerVector origclass, NumericMatrix origdata, 
         NumericMatrix proj=NumericMatrix(0),bool weight=true){
 

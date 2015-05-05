@@ -1,7 +1,8 @@
 #' Draw Huber plot for 2D data with various PP index
 #' 
 #' Draw Huber plot for 2D data with various PP index
-#' @usage Huber.plot(origdata2D,origclass,PPmethod,weight,r,lambda,opt.proj)
+#' @usage Huber.plot(origdata2D,origclass,PPmethod,weight,r,lambda,
+#'            opt.proj,UserDefFtn,...)
 #' @param origdata2D 2D data for Huber plot
 #' @param origclass class information
 #' @param PPmethod method for projection pursuit; "LDA", "PDA", "Lr", "GINI", and "ENTROPY"

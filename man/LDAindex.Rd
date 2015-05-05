@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{LDAindex}
 \alias{LDAindex}
-\title{LDA PP index}
+\title{LDA PPindex}
 \usage{
 LDAindex(origclass,origdata,proj,weight=TRUE)
 }
@@ -16,6 +16,9 @@ LDAindex(origclass,origdata,proj,weight=TRUE)
 \item{weight}{weight flag in LDA}
 }
 \description{
+LDA PP index
+}
+\details{
 Calculate LDA projection pursuit index value
 }
 \examples{

@@ -1,13 +1,14 @@
 Package: PPtreeViz
-Title: All about theprojection pursuit classification and regression tree 
-Description: Projection pursuit classification and regression tree using LDA,
+Title: Projection Pursuit Classification Tree Visualization
+Description: Tools for exploring projection pursuit classification tree using LDA,
     Lr or PDA projection pursuit index.
 Version: 1.0.0
-Author: Eun-Kyung Lee <lee.eunk@gmail.com>
-Maintainer: Eun-Kyung Lee <lee.eunk@ewha.ac.kr>
-Date: 2015-3-25
-Depends: R (>= 2.10),gridExtra,ggplot2,grid
-Imports: MASS (>= 3.1-20),Rcpp 
+Author: Eun-Kyung Lee 
+Maintainer: Eun-Kyung Lee <lee.eunk@gmail.com>
+Date: 2015-5-5
+Depends: R (>= 2.10),gridExtra,ggplot2,grid 
+Suggests: MASS (>= 3.1-20)
+Imports: Rcpp
 LinkingTo: Rcpp, RcppArmadillo
 License: GPL (>= 2)
 

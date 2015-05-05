@@ -1,7 +1,7 @@
 #' Print PP.Tree.class result
 #' 
 #' Print the projection pursuit classification tree result
-#' @usage print.PPtreeclass(x,coef.print=FALSE,cutoff.print=FALSE,verbose=TRUE,...)
+#' @title Print PP.Tree.class result
 #' @param x PPtreeclass object
 #' @param coef.print print projection coefficient in each node when TRUE
 #' @param cutoff.print print cutoff values in each node when TRUE
@@ -10,7 +10,7 @@
 #' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
 #' PPtree: Projection pursuit classification tree, 
 #' Electronic Journal of Statistics, 7:1369-1386.
-#' @export
+#' @export 
 #' @keywords tree
 #' @aliases print
 #' @examples
@@ -18,6 +18,7 @@
 #' Tree.result <- PP.Tree.class(iris[,5],iris[,1:4],"LDA")
 #' Tree.result
 #' print(Tree.result,coef.print=TRUE,cutoff.print=TRUE)
+
 print.PPtreeclass<-function(x,coef.print=FALSE,cutoff.print=FALSE,
                             verbose=TRUE,...){
    PPtreeOBJ<-x

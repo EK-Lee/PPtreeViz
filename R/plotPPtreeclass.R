@@ -1,7 +1,6 @@
 #' Plot projection pursuit classification tree
 #' 
 #' Plot projection pursuit classification tree
-#' @usage plot.PPtreeclass(x,font.size=17,width.size=1,...)
 #' @param x PPtreeclass object
 #' @param font.size font size of plot
 #' @param width.size size of eclipse in each node.

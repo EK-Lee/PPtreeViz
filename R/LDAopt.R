@@ -21,6 +21,7 @@
 #' LDA.proj.result <- LDAopt(iris[,5],iris[,1:4])
 #' LDA.proj.result$indexbest
 #' LDA.proj.result$projbest
+#' @useDynLib PPtreeViz
 LDAopt<-function(origclass,origdata,q=1,weight=TRUE,...) 
 { 
    origdata<-as.matrix(origdata)

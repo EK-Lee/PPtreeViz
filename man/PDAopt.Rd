@@ -34,7 +34,8 @@ Find the q-dim optimal projection using PDA projectin pursuit index
 \examples{
 data(iris)
 PDA.proj.result <- PDAopt(iris[,5],iris[,1:4],weight=TRUE,q=2,lambda=0.1)
-PDA.proj.result
+PDA.proj.result$indexbest
+PDA.proj.result$projbest
 }
 \references{
 Lee, EK., Cook, D.(2010)

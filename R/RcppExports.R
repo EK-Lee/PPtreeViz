@@ -4,6 +4,7 @@
 #' LDA PP index
 #' 
 #' Calculate LDA projection pursuit index value
+#' @title LDA PPindex
 #' @usage LDAindex(origclass,origdata,proj,weight=TRUE)
 #' @param origclass class information vector
 #' @param origdata data matrix without class information  
@@ -17,7 +18,8 @@
 #' @examples
 #' data(iris)
 #' LDAindex(iris[,5],as.matrix(iris[,1:4]))
-#' 
+#' @useDynLib PPtreeViz
+#' @importFrom Rcpp evalCpp
 LDAindex <- function(origclass, origdata, proj = matrix(0), weight = TRUE) {
     .Call('PPtreeViz_LDAindex', PACKAGE = 'PPtreeViz', origclass, origdata, proj, weight)
 }

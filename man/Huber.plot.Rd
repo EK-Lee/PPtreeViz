@@ -4,14 +4,15 @@
 \alias{Huber.plot}
 \title{Draw Huber plot for 2D data with various PP index}
 \usage{
-Huber.plot(origdata2D,origclass,PPmethod,weight,r,lambda,opt.proj,UserDefFtn,...)
+Huber.plot(origdata2D,origclass,PPmethod,weight,r,lambda,
+           opt.proj,UserDefFtn,...)
 }
 \arguments{
 \item{origdata2D}{2D data for Huber plot}
 
 \item{origclass}{class information}
 
-\item{PPmethod}{method for projection pursuit; "LDA", "PDA", "Lr", "GINI", "ENTROPY", and "UserDef"}
+\item{PPmethod}{method for projection pursuit; "LDA", "PDA", "Lr", "GINI", and "ENTROPY"}
 
 \item{weight}{weight flag in LDA, PDA and Lr index}
 
