@@ -21,7 +21,8 @@
 #' data(iris)
 #' Huber.plot(iris[,1:2],iris[,5],PPmethod="LDA")
 Huber.plot<-function(origdata2D,origclass,PPmethod="LDA",
-                     weight=TRUE,r=1,lambda=0.5,opt.proj=TRUE,UserDefFtn=NULL,...){  
+                     weight=TRUE,r=1,lambda=0.5,opt.proj=TRUE,
+                     UserDefFtn=NULL,...){  
    index<-NULL
    best.proj<-NULL
    best.index<-0

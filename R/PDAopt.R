@@ -23,9 +23,9 @@
 #' PDA.proj.result$indexbest
 #' PDA.proj.result$projbest
 PDAopt<-function(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...){ 
-   data.std<-apply(origdata,2,function(x) (x-mean(x))/ifelse(sd(x)==0,1,sd(x)))
+#   data.std<-apply(origdata,2,function(x) (x-mean(x))/ifelse(sd(x)==0,1,sd(x)))
    
-   data.std<-as.matrix(data.std)
+   data.std<-as.matrix(origdata)#data.std)
    
    class.table<-table(origclass)
    g<-length(class.table)
@@ -49,7 +49,6 @@ PDAopt<-function(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...){
       W<-W+gn1*t(temp.m2)%*%temp.m2/length(sel.id)      
    }
    
-   I<-diag(rep(1,p))
    W.t<-(1-lambda)*W; diag(W.t)<-diag(W)
    WB.t<-W.t+B
    opt<-eigen(MASS::ginv(WB.t)%*%B)

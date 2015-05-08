@@ -32,18 +32,14 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
    origdata<-as.matrix(origdata)
    Find.proj<-function(origclass,origdata,PPmethod,weight,r,lambda,
                        maxiter,...){
+
       n<-nrow(origdata)
       p<-ncol(origdata)
       g<-table(origclass)
       g.name<-as.numeric(names(g))
       G<-length(g)
       origclass<-as.numeric(factor(origclass))
-      if(PPmethod=="LDA"){
-         indexbest<-LDAindex(origclass,as.matrix(origdata),weight=weight);
-      } else if(PPmethod=="PDA"){
-         indexbest<-PDAindex(origclass,as.matrix(origdata),weight=weight,
-                             lambda=lambda);
-      } else if(PPmethod=="Lr"){
+      if(PPmethod=="Lr"){
          indexbest<-Lrindex(origclass,as.matrix(origdata),weight=weight,r=r);
       } else if(PPmethod=="GINI"){
          indexbest<-0;
@@ -61,35 +57,28 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
             if(indexbest<tempindex)
                indexbest<-tempindex;
          }  
-      }        
+      } else{
+        indexbest<-0;
+      }
       energy<-ifelse(energy==0,1-indexbest,energy)
       energy.temp<-1-indexbest
       TOL<-energy.temp/1000000
-    #  TOL<-0
+  
       if(PPmethod=="LDA"){
          a<-LDAopt(as.numeric(as.factor(origclass)),origdata,weight,q=1)
       } else if(PPmethod=="PDA"){
          a<-PDAopt(as.numeric(as.factor(origclass)),origdata,weight,q=1,
                    lambda=lambda)   
-      } else if(PPmethod=="Lr"){
-#         a<-PPopt(as.numeric(as.factor(origclass)),as.matrix(origdata),
-#                  weight,q=1,PPmethod="Lr",r=r,energy=energy,cooling=0.999,
-#                  TOL=TOL)         
-#      } else if(PPmethod=="GINI"){
-#         a<-PPopt(as.numeric(as.factor(origclass)),as.matrix(origdata),
-#                  PPmethod="GINI",q=1,energy=energy,cooling=0.999,TOL=TOL)          
-#      } else if(PPmethod=="ENTROPY"){
-#         a<-PPopt(as.numeric(as.factor(origclass)),as.matrix(origdata),
-#                  PPmethod="ENTROPY",q=1,energy=energy,cooling=0.999,
-#                  TOL=TOL)      
-          a<-PPopt(as.numeric(as.factor(origclass)),as.matrix(origdata),
-                   weight,q=1,PPmethod=PPmethod,r=r,energy=energy,cooling=0.999,
-                   TOL=TOL) 
+      } else {    
+         a<-PPopt(as.numeric(as.factor(origclass)),as.matrix(origdata),
+                  weight,q=1,PPmethod=PPmethod,r=r,energy=energy,cooling=0.999,
+                  TOL=TOL) 
       } 
       proj.data<-as.matrix(origdata)%*%a$projbest
       sign<-sign(a$projbest[abs(a$projbest)==max(abs(a$projbest))])
       index<-(1:p)*(abs(a$projbest)==max(abs(a$projbest)))
       index<-index[index>0]
+
       if(G==2){
          class<-origclass
       } else{
@@ -117,12 +106,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
          G<-length(g)
          n<-nrow(origdata)
          class<-as.numeric(factor(class))
-         if(PPmethod=="LDA"){
-            indexbest<-LDAindex(class,as.matrix(origdata),weight=weight);
-         } else if(PPmethod=="PDA"){
-            indexbest<-PDAindex(class,as.matrix(origdata),weight=weight,
-                                lambda=lambda);
-         } else if(PPmethod=="Lr"){
+         if(PPmethod=="Lr"){
             indexbest<-Lrindex(class,as.matrix(origdata),weight=weight,r=r);
          } else if(PPmethod=="GINI"){
             indexbest<-0;
@@ -140,6 +124,8 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
                if(indexbest<tempindex)
                   indexbest<-tempindex;
             }  
+         } else {
+           indexbest<-0
          }
          energy<-ifelse(energy==0,1-indexbest,energy)
          energy.temp<-1-indexbest
@@ -159,6 +145,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
             a$projbest<--a$projbest
          proj.data<-as.matrix(origdata)%*%a$projbest
       }
+ 
       m.LR<-tapply(proj.data,class,mean)
       temp.list<-sort.list(m.LR)
       m.LR<-m.LR[temp.list]
@@ -185,11 +172,6 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
                      ((IQR.LR[1]/sqrt(n.LR[1]))+(IQR.LR[2]/sqrt(n.LR[2]))))
       sel.proj<-sort(proj.data[which(proj.data>quantile(proj.data,prob=0.25)& 
                                      proj.data<quantile(proj.data,prob=0.75))])
-#      sel.n<-length(sel.proj)
-#      temp.cut<-matrix((sel.proj[2:sel.n]+sel.proj[1:(sel.n-1)])/2,ncol=1)
-#      c9<-sel.proj[sort.list(apply(temp.cut,1,function(x) 
-#                                { temp<-table(class,proj.data>x[1]);
-#                                  return(prod(temp[,1])+prod(temp[,2]))}))[1]]
       C<-c(c1,c2,c3,c4,c5,c6,c7,c8)
       Index<-a$indexbest
       Alpha<-t(a$projbest)

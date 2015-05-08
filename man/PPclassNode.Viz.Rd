@@ -4,7 +4,7 @@
 \alias{PPclassNode.Viz}
 \title{Visualization of each node in PPtree}
 \usage{
-PPclassNode.Viz(PPclassOBJ,node.id,Rule)
+PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image)
 }
 \arguments{
 \item{PPclassOBJ}{PPregclass object}
@@ -12,6 +12,12 @@ PPclassNode.Viz(PPclassOBJ,node.id,Rule)
 \item{node.id}{node ID}
 
 \item{Rule}{cutoff rule}
+
+\item{legend}{flag to represent legend in the plot. Default value is TRUE}
+
+\item{std}{flag to standardize data before drawing plot}
+
+\item{image}{flag to draw image plot of correlation matrix}
 }
 \description{
 Explore PPtree with different Rules in each split.
