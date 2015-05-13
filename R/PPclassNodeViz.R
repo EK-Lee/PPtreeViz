@@ -118,7 +118,9 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,legend=TRUE,std=TRUE,image=FAL
          colnames(image.cor)<-paste("V",1:ncol(image.cor),sep="")
          rownames(image.cor)<-paste("V",1:nrow(image.cor),sep="")
          p4<-ggplot(reshape2::melt(image.cor),aes(x=Var1,y=Var2,fill=value))+
-             geom_tile(color=scale_fill_gradient(low ="red",high="steelblue"))
+             geom_tile()+scale_fill_gradient(low ="blue",high="yellow",limit=c(-1,1))+
+             xlab("variables")+ylab("variables")+
+             ggtitle("correlation matrix")
          gridExtra::grid.arrange(p2,p1,p3,p4,nrow=2)
       } else{
          gridExtra::grid.arrange(p2,p3,p1,nrow=1)
