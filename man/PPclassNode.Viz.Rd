@@ -4,7 +4,7 @@
 \alias{PPclassNode.Viz}
 \title{Visualization of each node in PPtree}
 \usage{
-PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image)
+PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 }
 \arguments{
 \item{PPclassOBJ}{PPregclass object}
@@ -18,6 +18,8 @@ PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image)
 \item{std}{flag to standardize data before drawing plot}
 
 \item{image}{flag to draw image plot of correlation matrix}
+
+\item{diff.prop}{percentage of significant difference}
 }
 \description{
 Explore PPtree with different Rules in each split.

@@ -31,12 +31,20 @@ PPopt.Viz<-function(PPoptOBJ){
       bin.width<-ifelse(p>100,1,0.1)
       y.max<-max(c(abs(coef.data$coef),1/sqrt(p)))
       y.min<- -y.max
-      p2<-ggplot(coef.data,aes(x=vID,y=coef))+        
-          geom_segment(aes(yend=0,xend=vID,width=0.1))+
-          geom_hline(yintercept=0)+
+      p2<-ggplot(coef.data,aes(x=vID,y=coef))
+      if(p<=10){
+         p2<-p2+geom_segment(aes(yend=0,xend=vID,size=1))
+      } else{
+         p2<-p2+geom_segment(aes(yend=0,xend=vID))
+      }       
+
+       p2<-p2+geom_hline(yintercept=0)+
+          geom_hline(yintercept=c(-1,1)*1/sqrt(p),
+                   col=2,linetype="dashed")+
           ylim(y.min,y.max) +
           xlab("variable ID")+
-          ggtitle("Coefficients of Best Projection")
+          ggtitle("Coefficients of Best Projection")+
+          theme(legend.position = "none")
       gridExtra::grid.arrange(p2,p1,nrow=1)   
    } else{
       plot.list<-list()
@@ -49,13 +57,21 @@ PPopt.Viz<-function(PPoptOBJ){
                bin.width<-ifelse(p>100,1,0.1)
                y.max<-max(c(abs(coef.data$coef),1/sqrt(p)))
 
-               plot.list[[list.id]]<-ggplot(coef.data,aes(x=vID,y=coef))+
-                                     geom_segment(aes(yend=0,xend=vID,width=0.1))+
-                                     geom_hline(yintercept=0)+ 
-                                     xlab("variable ID")+ylim(-y.max,y.max)+
-                                     ggtitle(paste(
-                                        "Coefficients of Best Projection - dim",
-                                         as.character(i),sep=""))
+               temp.plot<-ggplot(coef.data,aes(x=vID,y=coef))
+               if(p<=10){
+                 temp.plot<-temp.plot+geom_segment(aes(yend=0,xend=vID,size=1))
+               } else{
+                 temp.plot<-temp.plot+geom_segment(aes(yend=0,xend=vID))
+               }       
+               temp.plot<-temp.plot+
+                          geom_hline(yintercept=c(-1,1)*1/sqrt(p),
+                            col=2,linetype="dashed")+
+                          geom_hline(yintercept=0)+ 
+                          xlab("variable ID")+ylim(-y.max,y.max)+
+                          ggtitle(paste("Coefficients of Best Projection - dim",
+                                         as.character(i),sep=""))+
+                          theme(legend.position = "none")
+               plot.list[[list.id]]<-temp.plot
                list.id<-list.id+1
             } else
             {  x<-proj.data[,j]

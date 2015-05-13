@@ -1,13 +1,14 @@
 #' Visualization of each node in PPtree
 #' 
 #' Explore PPtree with different Rules in each split.
-#' @usage PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image)
+#' @usage PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 #' @param PPclassOBJ PPregclass object
 #' @param node.id node ID
 #' @param Rule cutoff rule
 #' @param legend flag to represent legend in the plot. Default value is TRUE
 #' @param std flag to standardize data before drawing plot
 #' @param image flag to draw image plot of correlation matrix
+#' @param diff.prop percentage of significant difference
 #' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
 #' PPtree: Projection pursuit classification tree, 
 #' Electronic Journal of Statistics, 7:1369-1386.
@@ -18,7 +19,8 @@
 #' Tree.result <- PP.Tree.class(iris[,5],iris[,1:4],"LDA")
 #' Tree.result
 #' PPclassNode.Viz(Tree.result,1,1)
-PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,legend=TRUE,std=TRUE,image=FALSE){
+PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
+                          legend=TRUE,std=TRUE,image=FALSE,diff.prop=0.2){
    searchGroup<-function(node.id,TS,gName){
       flag<-TRUE
       sel.id<-TS[node.id,2:3]
@@ -85,13 +87,18 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,legend=TRUE,std=TRUE,image=FAL
       bin.width<-ifelse(p>100,1,0.1)
       y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
       
-      p2<-ggplot(coef.data,aes(x=vID,y=coef))+
-          geom_segment(aes(yend=0,xend=vID,width=0.1))+
-          geom_hline(yintercept=0)+ 
+      p2<-ggplot(coef.data,aes(x=vID,y=coef))
+      if(p<=10){
+        p2<-p2+geom_segment(aes(yend=0,xend=vID,size=1))
+      } else{
+        p2<-p2+geom_segment(aes(yend=0,xend=vID))
+      }
+      p2<-p2+geom_hline(yintercept=0)+ 
           geom_hline(yintercept=c(-1,1)*1/sqrt(ncol(origdata)),
                      col=2,linetype="dashed")+
           xlab("variable ID")+ggtitle(paste("Node",node.id,sep=" "))+
-          ylim(-y.max,y.max)
+          ylim(-y.max,y.max)+
+          theme(legend.position = "none")
       sel.data<-origdata[sel.id,]
       if(std){
          sel.data<-apply(sel.data,2,function(x) (x-mean(x))/sd(x))
@@ -102,23 +109,37 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,legend=TRUE,std=TRUE,image=FAL
       temp.data<-c(apply(sel.data[LR.class=="L",],2,mean),
                    apply(sel.data[LR.class!="L",],2,mean))
       if(!std) temp.data<-temp.data-mean(temp.data)
-      vvID<-1;mean.data<-1;Var1<-1;Var2<-1;value<-1;      
+      vvID<-1;mean.data<-1;Var1<-1;Var2<-1;value<-1;   
+      L.data<-temp.data[1:p];R.data<-temp.data[-(1:p)]
+      LRcolor<-rep("NonSig",2*p)
+      diff.LR<-abs(L.data-R.data)
+      cutoff.LR<-quantile(diff.LR,prob=1-diff.prop)
+
+      LRcolor[c(diff.LR>cutoff.LR,diff.LR>cutoff.LR)]<-"Sig"
       plot.data2<-data.frame(mean.data=temp.data,
                              vvID=c(vID,vID),
-                             LR=factor(c(rep("L",p),rep("R",p))))
+                             LR=factor(c(rep("L",p),rep("R",p))),
+                             LRcolor=factor(LRcolor,levels=c("Sig","NonSig")))
       y.max3 <-max(c(abs(plot.data2$mean.data)))
 
-      p3<-ggplot(plot.data2,aes(x=vvID,y=mean.data))+
-          geom_segment(aes(yend=0,xend=vvID,width=0.1))+facet_grid(LR~.)+
+      p3<-ggplot(plot.data2,aes(x=vvID,y=mean.data,color=LRcolor))
+      if(p<=10){
+        p3<-p3+geom_segment(aes(yend=0,xend=vvID,size=1))
+      } else{
+        p3<-p3+geom_segment(aes(yend=0,xend=vvID))
+      }
+      p3<-p3+facet_grid(LR~.)+
           ylab(ytitle)+xlab("variable ID")+
           ggtitle("Mean of left and right node")+ylim(-y.max3,y.max3)+  
-          geom_hline(yintercept=0)
+          geom_hline(yintercept=0)+
+          theme(legend.position = "none")
       if(image & p<=30){
          image.cor<-cor(sel.data)
          colnames(image.cor)<-paste("V",1:ncol(image.cor),sep="")
          rownames(image.cor)<-paste("V",1:nrow(image.cor),sep="")
          p4<-ggplot(reshape2::melt(image.cor),aes(x=Var1,y=Var2,fill=value))+
-             geom_tile()+scale_fill_gradient(low ="blue",high="yellow",limit=c(-1,1))+
+             geom_tile()+
+             scale_fill_gradient(low ="blue",high="yellow",limit=c(-1,1))+
              xlab("variables")+ylab("variables")+
              ggtitle("correlation matrix")
          gridExtra::grid.arrange(p2,p1,p3,p4,nrow=2)
