@@ -1,6 +1,6 @@
-#' Visualization of each node in PPtree
+#' Visualization tools to explore each node of PPtree
 #' 
-#' Explore PPtree with different Rules in each split.
+#' Explore PPtree with different Rules in each node.
 #' @usage PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 #' @param PPclassOBJ PPregclass object
 #' @param node.id node ID
@@ -47,8 +47,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
       sel.Name<-TS[sel.id[which(TS[sel.id,2]==0)],3]
       selName<-sort(gName[sel.Name])
       L.list<-sort(gName[sel.Name[LR.id[which(TS[sel.id,2]==0)]]])
-      R.list<-sort(gName[sel.Name[!LR.id[which(TS[sel.id,2]==0)]]])
-      
+      R.list<-sort(gName[sel.Name[!LR.id[which(TS[sel.id,2]==0)]]])     
       return(list(selName=selName,Llist=L.list,Rlist=R.list))
    }
    
@@ -76,14 +75,14 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
       proj.data<-c(as.matrix(origdata)%*%
                      as.matrix(Alpha[TS[node.id,4],]))[sel.id]
       proj.class<-origclass[sel.id]
-      plot.data<-data.frame(proj.data = proj.data,origclass=proj.class)
-      p1<- ggplot(plot.data, aes(x = proj.data,group=origclass))+
-                geom_histogram( aes(fill = origclass),position="stack")+
+      plot.data<-data.frame(proj.data=proj.data,origclass=proj.class)
+      p1<- ggplot(plot.data, aes(x=proj.data,group=origclass))+
+                geom_histogram( aes(fill=origclass),position="stack")+
                 geom_vline(xintercept=cut.off[TS[node.id,4],Rule],
                            linetype="longdash",lwd=1,col=2)
-      if(!legend) p1<-p1+theme(legend.position = "none")
+      if(!legend) p1<-p1+theme(legend.position="none")
       vID <-1:p
-      coef.data<-data.frame(vID = vID,coef=Alpha[TS[node.id,4],])
+      coef.data<-data.frame(vID=vID,coef=Alpha[TS[node.id,4],])
       bin.width<-ifelse(p>100,1,0.1)
       y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
       
@@ -98,7 +97,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
                      col=2,linetype="dashed")+
           xlab("variable ID")+ggtitle(paste("Node",node.id,sep=" "))+
           ylim(-y.max,y.max)+
-          theme(legend.position = "none")
+          theme(legend.position="none")
       sel.data<-origdata[sel.id,]
       if(std){
          sel.data<-apply(sel.data,2,function(x) (x-mean(x))/sd(x))
@@ -124,15 +123,15 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
 
       p3<-ggplot(plot.data2,aes(x=vvID,y=mean.data,color=LRcolor))
       if(p<=10){
-        p3<-p3+geom_segment(aes(yend=0,xend=vvID,size=1))
+         p3<-p3+geom_segment(aes(yend=0,xend=vvID,size=1))
       } else{
-        p3<-p3+geom_segment(aes(yend=0,xend=vvID))
+         p3<-p3+geom_segment(aes(yend=0,xend=vvID))
       }
       p3<-p3+facet_grid(LR~.)+
-          ylab(ytitle)+xlab("variable ID")+
-          ggtitle("Mean of left and right node")+ylim(-y.max3,y.max3)+  
-          geom_hline(yintercept=0)+
-          theme(legend.position = "none")
+             ylab(ytitle)+xlab("variable ID")+
+             ggtitle("Mean of left and right node")+ylim(-y.max3,y.max3)+  
+             geom_hline(yintercept=0)+
+             theme(legend.position="none")
       if(image & p<=30){
          image.cor<-cor(sel.data)
          colnames(image.cor)<-paste("V",1:ncol(image.cor),sep="")
@@ -148,8 +147,8 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
       }  
    } else{
       sel.id<-which(PP.classify(PPclassOBJ,origdata,Rule)$predict.class==
-                                                 gName[TS[node.id,3]])
-      find.i<-TS[which((TS[,2]==node.id | TS[,3]==node.id )& TS[,2]!=0),4]
+                                                          gName[TS[node.id,3]])
+      find.i<-TS[which((TS[,2]==node.id|TS[,3]==node.id)& TS[,2]!=0),4]
       proj.data<-c(as.matrix(origdata)%*%as.matrix(Alpha[find.i,]))[sel.id]
       proj.class<-origclass[sel.id]
       plot.data<-data.frame(proj.data=proj.data,proj.class=proj.class)

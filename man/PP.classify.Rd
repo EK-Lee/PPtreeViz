@@ -4,7 +4,7 @@
 \alias{PP.classify}
 \title{predict projection pursuit classification tree}
 \usage{
-PP.classify(Tree.result, test.data, Rule, true.class=NULL,...)
+PP.classify(Tree.result,test.data,Rule,true.class=NULL,...)
 }
 \arguments{
 \item{Tree.result}{PPtreeclass object}
@@ -18,8 +18,7 @@ PP.classify(Tree.result, test.data, Rule, true.class=NULL,...)
 5: mean of two group medians
 6: weighted mean of two group medians - weight with group size
 7: weighted mean of two group median - weight with group IQR
-8: weighted mean of two group median - weight with group IQR and size
-9: cutoff that minimize error rates in each node}
+8: weighted mean of two group median - weight with group IQR and size}
 
 \item{true.class}{true class of test dataset if available}
 

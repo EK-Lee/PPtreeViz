@@ -177,7 +177,7 @@ plot.PPtreeclass<-function(x,font.size=17,width.size=1,...){
       temp<-strsplit(as.character(gN),split="")[[1]]
       gN.width<-length(temp)     
       set.unit<-(sum(tolower(temp)!=temp)*0.65+
-                   sum(tolower(temp)==temp)*0.5)/gN.width
+                 sum(tolower(temp)==temp)*0.5)/gN.width
       Terminal.Node.V<-viewport(x=unit(0.5,"npc"),   
                                 y=unit(0.8,"npc"),   
                                 width=unit(1,"lines")*1.5,
@@ -205,7 +205,7 @@ plot.PPtreeclass<-function(x,font.size=17,width.size=1,...){
 
    calc.depth<-function(PPtreeobj){
       TS<-PPtreeobj$Tree.Struct
-      i<-1;  
+      i<-1  
       flag.L<-rep(FALSE,nrow(TS))
       keep.track<-1
       depth.track<-0
@@ -236,14 +236,11 @@ plot.PPtreeclass<-function(x,font.size=17,width.size=1,...){
       depth<-max(depth.track)+2
       return(depth)
    }
-
    nx<-length(table(PPtreeobj$origclass))
    ny<-calc.depth(PPtreeobj)
    tnex<-1
    node.id<-1
-
    grid.newpage()
-
    PPtree.Main.V<-viewport(layout=grid.layout(3,3, 
                                       heights=unit(c(3,1,1),
                                                    c("lines","null","lines")),

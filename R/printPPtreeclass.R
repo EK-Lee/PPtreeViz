@@ -79,9 +79,10 @@ print.PPtreeclass<-function(x,coef.print=FALSE,cutoff.print=FALSE,
    rownames(Alpha)<-paste("proj",1:nrow(Alpha),sep="")  
    colnames(cut.off)<-paste("Rule",1:ncol(cut.off),sep="")
    rownames(cut.off)<-paste("cut",1:nrow(cut.off),sep="")
-   TreePrint.output<-paste("=============================================================",
-                           "\nProjection Pursuit Classification Tree result",
-                           "\n=============================================================\n")
+   TreePrint.output<-
+     paste("=============================================================",                          
+           "\nProjection Pursuit Classification Tree result",                           
+           "\n=============================================================\n")
    for(i in 1:length(TreePrint))
       TreePrint.output<-paste(TreePrint.output,TreePrint[i],sep="\n")
    TreePrint.output<-paste(TreePrint.output,"\n",sep="")
@@ -102,8 +103,6 @@ print.PPtreeclass<-function(x,coef.print=FALSE,cutoff.print=FALSE,
                         PP.classify(PPtreeOBJ,sample.data.X, Rule=7, 
                                     sample.data.class)$predict.error,                 
                         PP.classify(PPtreeOBJ,sample.data.X, Rule=8, 
-#                                    sample.data.class)$predict.error,
-#                        PP.classify(PPtreeOBJ,sample.data.X, Rule=9, 
                                     sample.data.class)$predict.error)/
                         nrow(sample.data.X),nrow=1)               
    colnames(error.rate)<-colnames(cut.off)
@@ -112,19 +111,16 @@ print.PPtreeclass<-function(x,coef.print=FALSE,cutoff.print=FALSE,
    if(verbose){
       cat(TreePrint.output)
       if(coef.print){
-         cat(#"\n------------------------------------------------------------",
-             "\nProjection Coefficient in each node",
+         cat("\nProjection Coefficient in each node",
              "\n-------------------------------------------------------------\n")
          print(round(Alpha,4))
       }
       if(cutoff.print){
-         cat(#"\n-------------------------------------------------------------",
-             "\nCutoff values of each node",
+         cat("\nCutoff values of each node",
              "\n-------------------------------------------------------------\n")
          print(round(cut.off,4))
       }    
-      cat(#"\n-------------------------------------------------------------",
-          "\nError rates of various cutoff values",
+      cat("\nError rates of various cutoff values",
           "\n-------------------------------------------------------------\n")
       print(round(error.rate,4))
    }    

@@ -2,7 +2,7 @@
 % Please edit documentation in R/PPoptViz.R
 \name{PPopt.Viz}
 \alias{PPopt.Viz}
-\title{Visualize PPopt}
+\title{Visualize PPopt result}
 \usage{
 PPopt.Viz(PPoptOBJ)
 }

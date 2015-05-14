@@ -458,12 +458,12 @@ NumericVector proj=NumericVector(0)){
          {  tempindex += ((n2)/n)*(temptable2(j)/n2)*log(temptable2(j)/n2);        
          }
       } 
-      double maxI = log(2)-log(g);
+      double maxI = log(2.0)-log(g/1.0);
       if((g/2)*2 != g){
         maxI = -0.5*log((g*g-1.0)/4.0)+1.0/(2.0*g)*log((g-1.0)/(g+1.0));
       }
       
-      tempindex = (1+tempindex/log(g))/(1+maxI/log(g));
+      tempindex = (1+tempindex/log(g/1.0))/(1+maxI/log(g/1.0));
       if (tempindex > index) index = tempindex;            
    }   
 
@@ -566,12 +566,8 @@ List PPopt(IntegerVector origclass, NumericMatrix origdata,int q=1, std::string 
       } else if(PPmethod=="PDA"){
          indexbest = PDAindex(origclass,origdata,projbest,weight,lambda);
       } else if(PPmethod=="GINI"){
-         /*NumericMatrix tempdata;
-         tempdata = projdata(_,0);*/
          indexbest = GINIindex1D(origclass,origdata,projbest);        
       } else if(PPmethod=="ENTROPY"){
-         NumericVector tempdata;
-         tempdata = projdata(_,0);
          indexbest = ENTROPYindex1D(origclass,origdata,projbest);        
       }
    
@@ -580,7 +576,7 @@ List PPopt(IntegerVector origclass, NumericMatrix origdata,int q=1, std::string 
    
       double diff = 100;
       while(fabs(diff)>TOL && kk < maxiter){
-         double tempp = energy/log(kk+2);
+         double tempp = energy/log(kk+2.0);
          if(kk>1000) {
             temp = temp*cooling;
          } else {
@@ -640,9 +636,9 @@ List PPopt(IntegerVector origclass, NumericMatrix origdata,int q=1, std::string 
       }
       PutRNGstate();
       return Rcpp::List::create(Rcpp::Named("indexbest") = indexbest,
-                             Rcpp::Named("projbest") = projbest,
-                             Rcpp::Named("origclass") = origclass,
-                             Rcpp::Named("origdata") = origdata);
+                                Rcpp::Named("projbest") = projbest,
+                                Rcpp::Named("origclass") = origclass,
+                                Rcpp::Named("origdata") = origdata);
    }                           
 }
 

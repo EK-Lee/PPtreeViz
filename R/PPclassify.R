@@ -2,7 +2,7 @@
 #' 
 #' Predict class for the test set and calculate prediction error. 
 #' After finding tree structure, predict class for the test set and calculate prediction error.
-#' @usage PP.classify(Tree.result, test.data, Rule, true.class=NULL,...)  
+#' @usage PP.classify(Tree.result,test.data,Rule,true.class=NULL,...)  
 #' @param Tree.result PPtreeclass object 
 #' @param test.data  the test dataset
 #' @param Rule split rule 1: mean of two group means 
@@ -12,8 +12,7 @@
 #'                        5: mean of two group medians 
 #'                        6: weighted mean of two group medians - weight with group size
 #'                        7: weighted mean of two group median - weight with group IQR
-#'                        8: weighted mean of two group median - weight with group IQR and size
-#'                        9: cutoff that minimize error rates in each node                                            
+#'                        8: weighted mean of two group median - weight with group IQR and size                                          
 #' @param true.class true class of test dataset if available
 #' @param ... arguments to be passed to methods
 #' @return predict.class predicted class
@@ -32,8 +31,7 @@
 #' test <- tot[-train]
 #' Tree.result <- PP.Tree.class(iris[train,5],iris[train,1:4],"LDA")
 #' PP.classify(Tree.result,iris[test,1:4],1,iris[test,5])
-PP.classify <- function(Tree.result,test.data,Rule,true.class=NULL,...) {
-
+PP.classify<-function(Tree.result,test.data,Rule,true.class=NULL,...) {
    test.data<-as.matrix(test.data)
    if(!is.null(true.class)){  
       true.class<-as.matrix(true.class); 

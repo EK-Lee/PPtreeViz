@@ -22,21 +22,18 @@
 #' LDA.proj.result$indexbest
 #' LDA.proj.result$projbest
 #' @useDynLib PPtreeViz
-LDAopt<-function(origclass,origdata,q=1,weight=TRUE,...) 
-{ 
+LDAopt<-function(origclass,origdata,q=1,weight=TRUE,...){ 
    origdata<-as.matrix(origdata)
    class.table<-table(origclass)
    class.name<-names(class.table)
    p<-ncol(origdata)
-   mean.g<-matrix(apply(origdata,2,function(x) 
-                  tapply(x,origclass,mean,na.rm=TRUE)),ncol=p)
-   mean.all<-matrix(apply(origdata,2,mean),ncol=p)
-                   
+   mean.g<-matrix(apply(origdata,2,
+                        function(x) tapply(x,origclass,mean,na.rm=TRUE)),ncol=p)
+   mean.all<-matrix(apply(origdata,2,mean),ncol=p)                   
    B<-matrix(0,ncol=p,nrow=p)
    W<-matrix(0,ncol=p,nrow=p)
    g<-length(class.table)
-   n<-length(origclass)
-   
+   n<-length(origclass) 
    for(i in 1:g)
    {  sel.id<-which(origclass==class.name[i])
       temp.m1<-mean.g[i,]-mean.all
@@ -52,7 +49,7 @@ LDAopt<-function(origclass,origdata,q=1,weight=TRUE,...)
    proj.data<-origdata%*%optVector
    optindex<-LDAindex(origclass,origdata,optVector,weight)  
    optobj<-list(indexbest=optindex,projbest=optVector,
-                origclass = origclass,origdata= origdata)
+                origclass=origclass,origdata=origdata)
    class(optobj)<-append(class(optobj),"PPoptim")
    return(optobj)
 

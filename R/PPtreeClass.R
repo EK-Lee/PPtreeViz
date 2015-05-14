@@ -26,7 +26,7 @@
 #' data(iris)
 #' Tree.result <- PP.Tree.class(iris[,5],iris[,1:4],"LDA")
 #' Tree.result
-PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight= TRUE,r=1,
+PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
                         lambda=0.1,energy=0,maxiter=50000,...){
    TOL<-NULL
    origdata<-as.matrix(origdata)

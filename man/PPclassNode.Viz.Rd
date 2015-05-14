@@ -2,7 +2,7 @@
 % Please edit documentation in R/PPclassNodeViz.R
 \name{PPclassNode.Viz}
 \alias{PPclassNode.Viz}
-\title{Visualization of each node in PPtree}
+\title{Visualization tools to explore each node of PPtree}
 \usage{
 PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 }
@@ -22,7 +22,7 @@ PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 \item{diff.prop}{percentage of significant difference}
 }
 \description{
-Explore PPtree with different Rules in each split.
+Explore PPtree with different Rules in each node.
 }
 \examples{
 data(iris)
