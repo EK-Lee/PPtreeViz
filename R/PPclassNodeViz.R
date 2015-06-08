@@ -106,7 +106,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
       sel.data<-origdata[sel.id,]
       if(std){
          sel.data<-apply(sel.data,2,function(x) (x-mean(x))/sd(x))
-         ytitle<-"adjuste mean by each variable mean"
+         ytitle<-"adjusted mean by each variable mean"
       } else{
          ytitle<-"adjusted mean by overall mean"
       }
