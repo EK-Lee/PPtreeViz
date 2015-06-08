@@ -145,7 +145,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
              geom_tile()+
              scale_fill_gradient(low ="blue",high="yellow",limit=c(-1,1))+
              xlab("variables")+ylab("variables")+
-             ggtitle("correlation matrix")
+             ggtitle("correlation matrix")+theme(aspect.ratio=1)
          gridExtra::grid.arrange(p2,p1,p3,p4,nrow=2)
       } else{
          gridExtra::grid.arrange(p2,p3,p1,nrow=1)
