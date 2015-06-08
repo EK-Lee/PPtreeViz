@@ -2,14 +2,17 @@
 % Please edit documentation in R/PPoptViz.R
 \name{PPopt.Viz}
 \alias{PPopt.Viz}
-\title{Visualize PPopt result}
+\title{PPopt visualization}
 \usage{
 PPopt.Viz(PPoptOBJ)
 }
 \arguments{
-\item{PPoptOBJ}{result from LDAopt, PDAopt, and PPopt}
+\item{PPoptOBJ}{PPoptim object. result from LDAopt, PDAopt, and PPopt}
 }
 \description{
+Visualize PPopt result
+}
+\details{
 Visualize the result of projection pursuit optimization
 }
 \examples{

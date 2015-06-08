@@ -3,8 +3,8 @@
 #' Print the projection pursuit classification tree result
 #' @title Print PP.Tree.class result
 #' @param x PPtreeclass object
-#' @param coef.print print projection coefficient in each node when TRUE
-#' @param cutoff.print print cutoff values in each node when TRUE
+#' @param coef.print print projection coefficients in each node ifTRUE
+#' @param cutoff.print print cutoff values in each node if TRUE
 #' @param verbose print if TRUE, no output if FALSE
 #' @param ... arguments to be passed to methods
 #' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
@@ -26,14 +26,12 @@ print.PPtreeclass<-function(x,coef.print=FALSE,cutoff.print=FALSE,
    Alpha<-PPtreeOBJ$projbest.node
    cut.off<-PPtreeOBJ$splitCutoff.node
    gName<-names(table(PPtreeOBJ$origclass))
-
    pastemake<-function(k,arg,sep.arg=""){
       temp<-""
       for(i in 1:k)
          temp<-paste(temp,arg,sep=sep.arg)
       return(temp)
    }
-
    TreePrint<-"1) root"
    i<-1  
    flag.L<-rep(FALSE,nrow(TS))

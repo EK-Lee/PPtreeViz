@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{Lrindex}
 \alias{Lrindex}
-\title{Lr PP index}
+\title{Lr PPindex}
 \usage{
 Lrindex(origclass,origdata,proj,weight=TRUE,r=1)
 }
@@ -18,6 +18,9 @@ Lrindex(origclass,origdata,proj,weight=TRUE,r=1)
 \item{r}{r in Lr index}
 }
 \description{
+Lr projection pursuit index
+}
+\details{
 Calculate Lr projection pursuit index value
 }
 \examples{

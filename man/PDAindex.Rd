@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{PDAindex}
 \alias{PDAindex}
-\title{PDA PP index}
+\title{PDA PPindex}
 \usage{
 PDAindex(origclass,origdata,proj,weight=TRUE,lambda=0.1)
 }
@@ -18,6 +18,9 @@ PDAindex(origclass,origdata,proj,weight=TRUE,lambda=0.1)
 \item{lambda}{lambda in PDA index}
 }
 \description{
+PDA projection pursuit index
+}
+\details{
 Calculate PDA projection pursuit index value
 }
 \examples{

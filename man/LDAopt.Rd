@@ -4,30 +4,33 @@
 \alias{LDAopt}
 \title{PP optimization using LDA index}
 \usage{
-LDAopt(origclass, origdata,  q=1, weight = TRUE,...)
+LDAopt(origclass,origdata,q=1,weight=TRUE,...)
 }
 \arguments{
-\item{origclass}{class information vector}
+\item{origclass}{class information vector of data}
 
 \item{origdata}{data matrix without class information}
 
-\item{q}{dimension of projection matrix}
+\item{q}{dimension of projection vector}
 
-\item{weight}{weight flag using in LDA index}
+\item{weight}{weight flag in LDA index}
 
 \item{...}{arguments to be passed to methods}
 }
 \value{
 indexbest maximum LDA index value
 
-projbest optimal q-dim projection matrix
+projbest optimal q-dimensional projection matrix
 
 origclass original class information vector
 
 origdata  original data matrix  without class information
 }
 \description{
-Find the q-dim optimal projection using LDA projectin pursuit index
+PP optimization using LDA index
+}
+\details{
+Find the q-dimensional optimal projection using LDA projectin pursuit index
 }
 \examples{
 data(iris)

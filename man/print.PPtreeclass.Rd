@@ -11,9 +11,9 @@
 \arguments{
 \item{x}{PPtreeclass object}
 
-\item{coef.print}{print projection coefficient in each node when TRUE}
+\item{coef.print}{print projection coefficients in each node ifTRUE}
 
-\item{cutoff.print}{print cutoff values in each node when TRUE}
+\item{cutoff.print}{print cutoff values in each node if TRUE}
 
 \item{verbose}{print if TRUE, no output if FALSE}
 

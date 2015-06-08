@@ -1,18 +1,25 @@
 #' predict projection pursuit classification tree
 #' 
-#' Predict class for the test set and calculate prediction error. 
-#' After finding tree structure, predict class for the test set and calculate prediction error.
+#' Predict class for the test set with the fitted projection pursuit 
+#' classification tree and calculate prediction error.
+#' @title predict PPtree
 #' @usage PP.classify(Tree.result,test.data,Rule,true.class=NULL,...)  
 #' @param Tree.result PPtreeclass object 
 #' @param test.data  the test dataset
 #' @param Rule split rule 1: mean of two group means 
-#'                        2: weighted mean of two group means - weight with group size
-#'                        3: weighted mean of two group means - weight with group sd
-#'                        4: weighted mean of two group means - weight with group se
+#'                        2: weighted mean of two group means 
+#'                           - weight with group size
+#'                        3: weighted mean of two group means 
+#'                           - weight with group sd
+#'                        4: weighted mean of two group means 
+#'                           - weight with group se
 #'                        5: mean of two group medians 
-#'                        6: weighted mean of two group medians - weight with group size
-#'                        7: weighted mean of two group median - weight with group IQR
-#'                        8: weighted mean of two group median - weight with group IQR and size                                          
+#'                        6: weighted mean of two group medians 
+#'                           - weight with group size
+#'                        7: weighted mean of two group median 
+#'                           - weight with group IQR
+#'                        8: weighted mean of two group median 
+#'                           - weight with group IQR and size                                          
 #' @param true.class true class of test dataset if available
 #' @param ... arguments to be passed to methods
 #' @return predict.class predicted class

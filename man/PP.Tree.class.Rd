@@ -2,17 +2,18 @@
 % Please edit documentation in R/PPtreeClass.R
 \name{PP.Tree.class}
 \alias{PP.Tree.class}
-\title{Projection pursuit classification tree with various PP indices}
+\title{Projection pursuit classification tree}
 \usage{
-PP.Tree.class(origclass, origdata, PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
-              energy=0,maxiter=50000, ...)
+PP.Tree.class(origclass, origdata, PPmethod="LDA",weight=TRUE,
+                     r=1,lambda=0.1,energy=0,maxiter=50000, ...)
 }
 \arguments{
 \item{origclass}{class information vector}
 
 \item{origdata}{numeric data matrix without class information}
 
-\item{PPmethod}{method for projection pursuit; "LDA", "PDA", "Lr", "GINI", and "ENTROPY"}
+\item{PPmethod}{method for projection pursuit; "LDA", "PDA", "Lr",
+"GINI", and "ENTROPY"}
 
 \item{weight}{weight flag in LDA, PDA and Lr index}
 
@@ -20,25 +21,29 @@ PP.Tree.class(origclass, origdata, PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
 
 \item{lambda}{lambda in PDA index}
 
-\item{energy}{energy parameter}
+\item{energy}{parameter for the probability to take new projection}
 
-\item{maxiter}{number of maximum iteration}
+\item{maxiter}{maximum iteration number}
 
 \item{...}{arguments to be passed to methods}
 }
 \value{
-Tree.Struct Tree structure of projection pursuit classification tree
+Tree.Struct tree structure of projection pursuit classification tree
 
-projbest.node 1-dim optimal projections of each split node
+projbest.node 1 dimensional optimal projections of each node split
 
-splitCutoff.node cutoff values of each split node
+splitCutoff.node cutoff values of each node split
 
 origclass original class
 
 origdata original data
 }
 \description{
-Find tree structure using various projection pursuit indices of classification in each split.
+Construct the projection pursuit classification tree
+}
+\details{
+Find tree structure using various projection pursuit indices of
+classification in each split.
 }
 \examples{
 data(iris)

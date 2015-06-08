@@ -1,14 +1,15 @@
 #' PP optimization using LDA index
 #' 
-#' Find the q-dim optimal projection using LDA projectin pursuit index
-#' @usage LDAopt(origclass, origdata,  q=1, weight = TRUE,...) 
-#' @param origclass class information vector
+#' Find the q-dimensional optimal projection using LDA projectin pursuit index
+#' @title PP optimization using LDA index
+#' @usage LDAopt(origclass,origdata,q=1,weight=TRUE,...) 
+#' @param origclass class information vector of data
 #' @param origdata data matrix without class information
-#' @param q dimension of projection matrix
-#' @param weight weight flag using in LDA index
+#' @param q dimension of projection vector
+#' @param weight weight flag in LDA index
 #' @param ... arguments to be passed to methods
 #' @return indexbest maximum LDA index value
-#' @return projbest optimal q-dim projection matrix
+#' @return projbest optimal q-dimensional projection matrix
 #' @return origclass original class information vector
 #' @return origdata  original data matrix  without class information
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 

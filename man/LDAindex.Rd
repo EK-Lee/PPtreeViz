@@ -16,7 +16,7 @@ LDAindex(origclass,origdata,proj,weight=TRUE)
 \item{weight}{weight flag in LDA}
 }
 \description{
-LDA PP index
+LDA projection pursuit index
 }
 \details{
 Calculate LDA projection pursuit index value

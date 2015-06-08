@@ -1,16 +1,20 @@
-#' Draw Huber plot for 2D data with various PP index
+#' Huber plot for 2D data
 #' 
-#' Draw Huber plot for 2D data with various PP index
-#' @usage Huber.plot(origdata2D,origclass,PPmethod,weight,r,lambda,
-#'            opt.proj,UserDefFtn,...)
-#' @param origdata2D 2D data for Huber plot
-#' @param origclass class information
-#' @param PPmethod method for projection pursuit; "LDA", "PDA", "Lr", "GINI", and "ENTROPY"
+#' Draw Huber plot for 2-dimensional data with various PP indices and 
+#' the histogram of the projected data onto the optimal projection to 
+#' explore the behavior of the projection prsuit indices
+#' @title Huber plot
+#' @usage Huber.plot(origdata2D,origclass,PPmethod="LDA",weight=TRUE,r=1,
+#'            lambda=0.5,opt.proj=TRUE,UserDefFtn=NULL,...)
+#' @param origdata2D 2-dimensional numerical data for Huber plot
+#' @param origclass class information vector of data
+#' @param PPmethod method for projection pursuit;
+#'         "LDA", "PDA", "Lr", "GINI", "ENTROPY", and "UserDef"
 #' @param weight weight flag in LDA, PDA and Lr index
 #' @param r r in Lr index
 #' @param lambda lambda in PDA index 
 #' @param opt.proj flag to show the best projection in the plot
-#' @param UserDefFtn  User defined index function
+#' @param UserDefFtn  User defined index function when PPmethod="UserDef"
 #' @param ...  arguments to be passed to methods
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
 #' Projection Pursuit for exploratory supervised classification, 
@@ -43,7 +47,7 @@ Huber.plot<-function(origdata2D,origclass,PPmethod="LDA",
       } else if(PPmethod=="ENTROPY"){
         newindex<-ENTROPYindex1D(origclass,origdata2D,proj)
       } else if(PPmethod=="UserDef"){
-        newindex<-UserDefFtn(proj.data)
+        newindex<-UserDefFtn(proj.data,...)
       } 
       index<-c(index,newindex)
    }
@@ -67,7 +71,8 @@ Huber.plot<-function(origdata2D,origclass,PPmethod="LDA",
                  c(PPindex[i]*cos(theta),PPindex[i]*sin(theta)))
       data.circle<-rbind(data.circle,c(4*cos(theta),4*sin(theta)))
    }
-   orig.scaled<-apply(origdata2D,2,function(x) (x-mean(x))/diff(range(x))*3.5)
+   maxdiff<-max(c(diff(range(origdata2D[,1])),diff(range(origdata2D[,2]))))
+   orig.scaled<-apply(origdata2D,2,function(x) (x-mean(x))/maxdiff*3.5)
    data.cX<-data.circle[,1]
    data.cY<-data.circle[,2]
    data.X<-data.index[,1]
@@ -77,6 +82,8 @@ Huber.plot<-function(origdata2D,origclass,PPmethod="LDA",
    y<-orig.scaled[,2]
    group<-origclass
    point.data<-data.frame(x,y,group)
+   min.X<-min(unlist(plot.data))
+   max.X<-max(unlist(plot.data))
    P1<-ggplot(data=plot.data,aes(x=data.X,y=data.Y))+
          geom_path()+
          geom_path(aes(x=data.cX,y=data.cY),linetype="dashed")+

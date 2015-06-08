@@ -2,7 +2,7 @@
 % Please edit documentation in R/PPclassNodeViz.R
 \name{PPclassNode.Viz}
 \alias{PPclassNode.Viz}
-\title{Visualization tools to explore each node of PPtree}
+\title{PPtree node visualization}
 \usage{
 PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 }
@@ -19,10 +19,17 @@ PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 
 \item{image}{flag to draw image plot of correlation matrix}
 
-\item{diff.prop}{percentage of significant difference}
+\item{diff.prop}{percentage of number of variables with significant
+differences and shown in red in the bar chart style means}
 }
 \description{
-Explore PPtree with different Rules in each node.
+Visualization tools to explore each node of PPtree
+}
+\details{
+For the inner node, four plots are provided - the bar chart style plot with
+projection pursuit coefficients of each variable, the histogram of the
+projected data, the bar chart style plots with means of each variables for
+the left and the right group, and the image plot of correlations.
 }
 \examples{
 data(iris)

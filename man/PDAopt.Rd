@@ -4,16 +4,16 @@
 \alias{PDAopt}
 \title{PP optimization using PDA index}
 \usage{
-PDAopt(origclass,origdata,q=1,weight=TRUE,lambda=0.1, ...)
+PDAopt(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...)
 }
 \arguments{
-\item{origclass}{class information vector}
+\item{origclass}{class information vector of data}
 
 \item{origdata}{data matrix without class information}
 
-\item{q}{dimension of projection matrix}
+\item{q}{dimension of projection vector}
 
-\item{weight}{weight flag using in PDA index}
+\item{weight}{weight flag in PDA index}
 
 \item{lambda}{lambda in PDA index}
 
@@ -22,14 +22,17 @@ PDAopt(origclass,origdata,q=1,weight=TRUE,lambda=0.1, ...)
 \value{
 indexbest maximum PDA index value
 
-projbest optimal q-dim projection matrix
+projbest optimal q-dimensional projection matrix
 
 origclass original class information vector
 
-origdata  original data matrix  without class information
+origdata  original data matrix without class information
 }
 \description{
-Find the q-dim optimal projection using PDA projectin pursuit index
+PP optimization using PDA index
+}
+\details{
+Find the q-dimensional optimal projection using PDA projectin pursuit index
 }
 \examples{
 data(iris)
@@ -38,7 +41,7 @@ PDA.proj.result$indexbest
 PDA.proj.result$projbest
 }
 \references{
-Lee, EK., Cook, D.(2010)
+Lee, EK, Cook, D.(2010)
 A projection pursuit index for large p small n data,
 Statistics and Computing, 20:381-392.
 }

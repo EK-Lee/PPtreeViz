@@ -2,17 +2,18 @@
 % Please edit documentation in R/Huberplot.R
 \name{Huber.plot}
 \alias{Huber.plot}
-\title{Draw Huber plot for 2D data with various PP index}
+\title{Huber plot}
 \usage{
-Huber.plot(origdata2D,origclass,PPmethod,weight,r,lambda,
-           opt.proj,UserDefFtn,...)
+Huber.plot(origdata2D,origclass,PPmethod="LDA",weight=TRUE,r=1,
+           lambda=0.5,opt.proj=TRUE,UserDefFtn=NULL,...)
 }
 \arguments{
-\item{origdata2D}{2D data for Huber plot}
+\item{origdata2D}{2-dimensional numerical data for Huber plot}
 
-\item{origclass}{class information}
+\item{origclass}{class information vector of data}
 
-\item{PPmethod}{method for projection pursuit; "LDA", "PDA", "Lr", "GINI", and "ENTROPY"}
+\item{PPmethod}{method for projection pursuit;
+"LDA", "PDA", "Lr", "GINI", "ENTROPY", and "UserDef"}
 
 \item{weight}{weight flag in LDA, PDA and Lr index}
 
@@ -22,12 +23,17 @@ Huber.plot(origdata2D,origclass,PPmethod,weight,r,lambda,
 
 \item{opt.proj}{flag to show the best projection in the plot}
 
-\item{UserDefFtn}{User defined index function}
+\item{UserDefFtn}{User defined index function when PPmethod="UserDef"}
 
 \item{...}{arguments to be passed to methods}
 }
 \description{
-Draw Huber plot for 2D data with various PP index
+Huber plot for 2D data
+}
+\details{
+Draw Huber plot for 2-dimensional data with various PP indices and
+the histogram of the projected data onto the optimal projection to
+explore the behavior of the projection prsuit indices
 }
 \examples{
 data(iris)

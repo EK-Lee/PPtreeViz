@@ -1,6 +1,10 @@
 #' Visualization tools to explore each node of PPtree
 #' 
-#' Explore PPtree with different Rules in each node.
+#' For the inner node, four plots are provided - the bar chart style plot with
+#' projection pursuit coefficients of each variable, the histogram of the
+#' projected data, the bar chart style plots with means of each variables for 
+#' the left and the right group, and the image plot of correlations. 
+#' @title PPtree node visualization
 #' @usage PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 #' @param PPclassOBJ PPregclass object
 #' @param node.id node ID
@@ -8,7 +12,8 @@
 #' @param legend flag to represent legend in the plot. Default value is TRUE
 #' @param std flag to standardize data before drawing plot
 #' @param image flag to draw image plot of correlation matrix
-#' @param diff.prop percentage of significant difference
+#' @param diff.prop percentage of number of variables with significant 
+#'                  differences and shown in red in the bar chart style means
 #' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
 #' PPtree: Projection pursuit classification tree, 
 #' Electronic Journal of Statistics, 7:1369-1386.

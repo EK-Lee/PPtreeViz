@@ -2,7 +2,7 @@
 % Please edit documentation in R/PPclassify.R
 \name{PP.classify}
 \alias{PP.classify}
-\title{predict projection pursuit classification tree}
+\title{predict PPtree}
 \usage{
 PP.classify(Tree.result,test.data,Rule,true.class=NULL,...)
 }
@@ -12,13 +12,19 @@ PP.classify(Tree.result,test.data,Rule,true.class=NULL,...)
 \item{test.data}{the test dataset}
 
 \item{Rule}{split rule 1: mean of two group means
-2: weighted mean of two group means - weight with group size
-3: weighted mean of two group means - weight with group sd
-4: weighted mean of two group means - weight with group se
+2: weighted mean of two group means
+   - weight with group size
+3: weighted mean of two group means
+   - weight with group sd
+4: weighted mean of two group means
+   - weight with group se
 5: mean of two group medians
-6: weighted mean of two group medians - weight with group size
-7: weighted mean of two group median - weight with group IQR
-8: weighted mean of two group median - weight with group IQR and size}
+6: weighted mean of two group medians
+   - weight with group size
+7: weighted mean of two group median
+   - weight with group IQR
+8: weighted mean of two group median
+   - weight with group IQR and size}
 
 \item{true.class}{true class of test dataset if available}
 
@@ -30,8 +36,11 @@ predict.class predicted class
 predict.error number of the prediction errors
 }
 \description{
-Predict class for the test set and calculate prediction error.
-After finding tree structure, predict class for the test set and calculate prediction error.
+predict projection pursuit classification tree
+}
+\details{
+Predict class for the test set with the fitted projection pursuit
+classification tree and calculate prediction error.
 }
 \examples{
 data(iris)

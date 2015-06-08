@@ -1,18 +1,19 @@
 #' PP optimization using PDA index
 #' 
-#'  Find the q-dim optimal projection using PDA projectin pursuit index
-#' @usage PDAopt(origclass,origdata,q=1,weight=TRUE,lambda=0.1, ...) 
-#' @param origclass class information vector
+#' Find the q-dimensional optimal projection using PDA projectin pursuit index
+#' @title PP optimization using PDA index
+#' @usage PDAopt(origclass,origdata,q=1,weight=TRUE,lambda=0.1,...) 
+#' @param origclass class information vector of data
 #' @param origdata data matrix without class information
-#' @param q dimension of projection matrix
-#' @param weight weight flag using in PDA index
+#' @param q dimension of projection vector
+#' @param weight weight flag in PDA index
 #' @param lambda lambda in PDA index
 #' @param ... arguments to be passed to methods
 #' @return indexbest maximum PDA index value
-#' @return projbest optimal q-dim projection matrix
+#' @return projbest optimal q-dimensional projection matrix
 #' @return origclass original class information vector
-#' @return origdata  original data matrix  without class information
-#' @references Lee, EK., Cook, D.(2010) 
+#' @return origdata  original data matrix without class information
+#' @references Lee, EK, Cook, D.(2010) 
 #' A projection pursuit index for large p small n data, 
 #' Statistics and Computing, 20:381-392.
 #' @export

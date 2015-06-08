@@ -2,10 +2,10 @@
 % Please edit documentation in R/RcppExports.R
 \name{PPopt}
 \alias{PPopt}
-\title{PP optimization using various PP indices}
+\title{Projection pursuit optimization}
 \usage{
-PPopt(origclass,origdata,q=1,PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
-             energy=0,cooling=0.999,TOL=0.0001,maxiter = 50000)
+PPopt(origclass,origdata,q=1,PPmethod="LDA",weight=TRUE,r=1,
+             lambda=0.1,energy=0,cooling=0.999,TOL=0.0001,maxiter = 50000)
 }
 \arguments{
 \item{origclass}{class information vector}
@@ -14,7 +14,8 @@ PPopt(origclass,origdata,q=1,PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
 
 \item{q}{dimension of projection matrix}
 
-\item{PPmethod}{method for projection pursuit; "LDA", "PDA", "Lr", "GINI", and "ENTROPY"}
+\item{PPmethod}{method for projection pursuit; "LDA", "PDA", "Lr", "GINI",
+and "ENTROPY"}
 
 \item{weight}{weight flag in LDA, PDA and Lr index}
 
@@ -40,7 +41,11 @@ origclass original class information vector
 origdata  original data matrix  without class information
 }
 \description{
-Find the q-dim optimal projection using various projectin pursuit indices with class information
+PP optimization using various projection pursuit indices
+}
+\details{
+Find the q-dim optimal projection using various projectin pursuit indices
+with class information
 }
 \examples{
 data(iris)

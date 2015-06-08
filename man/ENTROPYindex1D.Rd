@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{ENTROPYindex1D}
 \alias{ENTROPYindex1D}
-\title{ENTROPY PP index}
+\title{ENTROPY PPindex}
 \usage{
 ENTROPYindex1D(origclass,origdata,proj)
 }
@@ -14,6 +14,9 @@ ENTROPYindex1D(origclass,origdata,proj)
 \item{proj}{projection matrix}
 }
 \description{
+ENTROPY projection pursuit index
+}
+\details{
 Calculate ENTROPY projection pursuit index value
 }
 \examples{

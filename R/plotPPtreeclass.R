@@ -1,13 +1,15 @@
-#' Plot projection pursuit classification tree
+#' projection pursuit classification tree plot
 #' 
-#' Plot projection pursuit classification tree
+#' Draw projection pursuit classification tree with tree structure. It is 
+#' modified from a function in party library.
+#' @title PPtree plot
 #' @param x PPtreeclass object
 #' @param font.size font size of plot
 #' @param width.size size of eclipse in each node.
 #' @param ... arguments to be passed to methods
 #' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
 #' PPtree: Projection pursuit classification tree, 
-#' Electronic Journal of Statistics, 7:1369-1386..
+#' Electronic Journal of Statistics, 7:1369-1386.
 #' @export
 #' @keywords tree
 #' @aliases plot

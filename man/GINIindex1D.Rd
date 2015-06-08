@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{GINIindex1D}
 \alias{GINIindex1D}
-\title{GINI PP index}
+\title{GINI PPindex}
 \usage{
 GINIindex1D(origclass,origdata,proj)
 }
@@ -14,6 +14,9 @@ GINIindex1D(origclass,origdata,proj)
 \item{proj}{projection matrix}
 }
 \description{
+GINI projection pursuit index
+}
+\details{
 Calculate GINI projection pursuit index value
 }
 \examples{

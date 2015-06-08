@@ -1,20 +1,23 @@
-#' Projection pursuit classification tree with various PP indices
+#' Construct the projection pursuit classification tree 
 #' 
-#' Find tree structure using various projection pursuit indices of classification in each split.
-#' @usage PP.Tree.class(origclass, origdata, PPmethod="LDA",weight=TRUE,r=1,lambda=0.1,
-#'               energy=0,maxiter=50000, ...) 
+#' Find tree structure using various projection pursuit indices of 
+#' classification in each split.
+#' @title Projection pursuit classification tree 
+#' @usage PP.Tree.class(origclass, origdata, PPmethod="LDA",weight=TRUE,
+#'                      r=1,lambda=0.1,energy=0,maxiter=50000, ...) 
 #' @param origclass class information vector
-#' @param origdata  numeric data matrix without class information
-#' @param PPmethod method for projection pursuit; "LDA", "PDA", "Lr", "GINI", and "ENTROPY"
+#' @param origdata numeric data matrix without class information
+#' @param PPmethod method for projection pursuit; "LDA", "PDA", "Lr", 
+#'        "GINI", and "ENTROPY"
 #' @param weight weight flag in LDA, PDA and Lr index
 #' @param r r in Lr index
 #' @param lambda lambda in PDA index
-#' @param energy energy parameter
-#' @param maxiter number of maximum iteration
+#' @param energy parameter for the probability to take new projection
+#' @param maxiter maximum iteration number
 #' @param ... arguments to be passed to methods
-#' @return Tree.Struct Tree structure of projection pursuit classification tree
-#' @return projbest.node 1-dim optimal projections of each split node
-#' @return splitCutoff.node cutoff values of each split node 
+#' @return Tree.Struct tree structure of projection pursuit classification tree
+#' @return projbest.node 1 dimensional optimal projections of each node split
+#' @return splitCutoff.node cutoff values of each node split 
 #' @return origclass original class 
 #' @return origdata original data
 #' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
@@ -32,7 +35,6 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
    origdata<-as.matrix(origdata)
    Find.proj<-function(origclass,origdata,PPmethod,weight,r,lambda,
                        maxiter,...){
-
       n<-nrow(origdata)
       p<-ncol(origdata)
       g<-table(origclass)
@@ -44,7 +46,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
       } else if(PPmethod=="GINI"){
          indexbest<-0;
          for(i in 1:p){
-            tempdata<-origdata[,i];
+            tempdata<-as.matrix(origdata[,i]);
             tempindex<-GINIindex1D(origclass,tempdata);  
             if(indexbest<tempindex)
                indexbest<-tempindex;
@@ -52,7 +54,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
       } else if(PPmethod=="ENTROPY"){
          indexbest<-0;
          for(i in 1:p){
-            tempdata<-origdata[,i];
+            tempdata<-as.matrix(origdata[,i]);
             tempindex<-ENTROPYindex1D(origclass,tempdata);  
             if(indexbest<tempindex)
                indexbest<-tempindex;
@@ -257,7 +259,6 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
    rep1<-2
    rep2<-1
    rep<-1
-
    Tree.final<-Tree.construct(origclass,origdata,Tree.Struct,id,rep,rep1, 
                               rep2,projbest.node, splitCutoff.node,
                               PPmethod,r,lambda,TOL,maxiter,...)                            
