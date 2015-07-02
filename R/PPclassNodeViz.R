@@ -134,7 +134,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
       }
       p3<-p3+facet_grid(LR~.)+
              ylab(ytitle)+xlab("variable ID")+
-             ggtitle("Mean of left and right node")+ylim(-y.max3,y.max3)+  
+             ggtitle("Mean of left and right nodes")+ylim(-y.max3,y.max3)+  
              geom_hline(yintercept=0)+
              theme(legend.position="none")
       if(image & p<=30){
