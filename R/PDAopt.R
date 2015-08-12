@@ -14,7 +14,7 @@
 #' @return origclass original class information vector
 #' @return origdata  original data matrix without class information
 #' @references Lee, EK, Cook, D.(2010) 
-#' A projection pursuit index for large p small n data, 
+#' A Projection Pursuit Index for Large p Small n Data, 
 #' Statistics and Computing, 20:381-392.
 #' @export
 #' @keywords projection pursuit

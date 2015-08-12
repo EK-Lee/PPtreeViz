@@ -13,8 +13,8 @@
 #' @return origclass original class information vector
 #' @return origdata  original data matrix  without class information
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
-#' Projection Pursuit for exploratory supervised classification, 
-#' Journal of Computational and Graphical statistics, 14(4):831-846.
+#' Projection Pursuit for Exploratory Supervised Classification, 
+#' Journal of Computational and Graphical Statistics, 14(4):831-846.
 #' @export
 #' @keywords projection pursuit
 #' @examples
