@@ -141,8 +141,11 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
          image.cor<-cor(sel.data)
          colnames(image.cor)<-paste("V",1:ncol(image.cor),sep="")
          rownames(image.cor)<-paste("V",1:nrow(image.cor),sep="")
-         p4<-ggplot(reshape2::melt(image.cor),aes(x=Var1,y=Var2,fill=value))+
-             geom_tile()+
+         temp.data<-data.frame(Var1=rep(colnames(image.cor),nrow(image.cor)),
+                          Var2=rep(colnames(image.cor),each=nrow(image.cor)),
+                          value=c(image.cor))
+         p4<-ggplot(temp.data,aes(x=Var1,y=Var2,fill=value))+
+         geom_tile()+
              scale_fill_gradient(low ="blue",high="yellow",limit=c(-1,1))+
              xlab("variables")+ylab("variables")+
              ggtitle("correlation matrix")+theme(aspect.ratio=1)

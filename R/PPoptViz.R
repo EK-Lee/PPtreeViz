@@ -13,7 +13,7 @@
 #' data(iris)
 #' PPopt.Viz(LDAopt(iris[,5],iris[,1:4],q=1))
 #' PPopt.Viz(LDAopt(iris[,5],iris[,1:4],q=2))
-#' @import ggplot2 grid gridExtra reshape2
+#' @import ggplot2 grid gridExtra 
 
 PPopt.Viz<-function(PPoptOBJ){
    proj.data<-PPoptOBJ$origdata%*%PPoptOBJ$projbest
