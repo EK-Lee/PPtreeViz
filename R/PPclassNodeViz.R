@@ -87,7 +87,8 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
                            linetype="longdash",lwd=1,col=2)
       if(!legend) p1<-p1+theme(legend.position="none")
       vID <-1:p
-      coef.data<-data.frame(vID=vID,coef=Alpha[TS[node.id,4],])
+      coef<-Alpha[TS[node.id,4],]
+      coef.data<-data.frame(vID=vID,coef=coef)
       bin.width<-ifelse(p>100,1,0.1)
       y.max <-max(c(abs(coef.data$coef),1/sqrt(p)))
       
@@ -105,7 +106,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
           theme(legend.position="none")
       sel.data<-origdata[sel.id,]
       if(std){
-         sel.data<-apply(sel.data,2,function(x) (x-mean(x))/sd(x))
+         sel.data<-apply(sel.data,2,function(x) (x-mean(x))/stats::sd(x))
          ytitle<-"adjusted mean by each variable mean"
       } else{
          ytitle<-"adjusted mean by overall mean"
@@ -117,7 +118,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
       L.data<-temp.data[1:p];R.data<-temp.data[-(1:p)]
       LRcolor<-rep("NonSig",2*p)
       diff.LR<-abs(L.data-R.data)
-      cutoff.LR<-quantile(diff.LR,prob=1-diff.prop)
+      cutoff.LR<-stats::quantile(diff.LR,prob=1-diff.prop)
 
       LRcolor[c(diff.LR>cutoff.LR,diff.LR>cutoff.LR)]<-"Sig"
       plot.data2<-data.frame(mean.data=temp.data,
@@ -138,7 +139,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
              geom_hline(yintercept=0)+
              theme(legend.position="none")
       if(image & p<=30){
-         image.cor<-cor(sel.data)
+         image.cor<-stats::cor(sel.data)
          colnames(image.cor)<-paste("V",1:ncol(image.cor),sep="")
          rownames(image.cor)<-paste("V",1:nrow(image.cor),sep="")
          temp.data<-data.frame(Var1=rep(colnames(image.cor),nrow(image.cor)),

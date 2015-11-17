@@ -38,7 +38,9 @@
 #' test <- tot[-train]
 #' Tree.result <- PP.Tree.class(iris[train,5],iris[train,1:4],"LDA")
 #' PP.classify(Tree.result,iris[test,1:4],1,iris[test,5])
-PP.classify<-function(Tree.result,test.data,Rule,true.class=NULL,...) {
+PP.classify<-function(Tree.result,test.data=NULL,Rule=1,true.class=NULL,...) {
+  if(is.null(test.data))
+    test.data<-Tree.result$origdata
    test.data<-as.matrix(test.data)
    if(!is.null(true.class)){  
       true.class<-as.matrix(true.class); 
@@ -115,7 +117,6 @@ PP.classify<-function(Tree.result,test.data,Rule,true.class=NULL,...) {
                         Tree.result$splitCutoff.node,1,Rule)
    test.class<-rep(0,n)
    IOindex<-rep(1,n)
-   rep<-1
    temp<-PP.Classification(Tree.result$Tree.Struct,temp$test.class.index,
                            IOindex,test.class,1,1)
    if(!is.null(true.class)){

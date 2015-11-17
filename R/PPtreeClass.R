@@ -152,10 +152,10 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
       temp.list<-sort.list(m.LR)
       m.LR<-m.LR[temp.list]
       sd.LR<-tapply(proj.data,class,function(x) 
-                                    ifelse(length(x)>1,sd(x),0))[temp.list]
+                                    ifelse(length(x)>1,stats::sd(x),0))[temp.list]
       IQR.LR<-tapply(proj.data,class,function(x) 
-                                    ifelse(length(x)>1,IQR(x),0))[temp.list]
-      median.LR<-tapply(proj.data,class,median)[temp.list]
+                                    ifelse(length(x)>1,stats::IQR(x),0))[temp.list]
+      median.LR<-tapply(proj.data,class,stats::median)[temp.list]
       n.LR<-table(class)[temp.list]
         
       c1<-(m.LR[1]+m.LR[2])/2
@@ -172,8 +172,8 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
       c8<-ifelse(sum(IQR.LR==0)!=0,c6,(median.LR[1]*(IQR.LR[2]/sqrt(n.LR[2]))+ 
                            median.LR[2]*(IQR.LR[1]/sqrt(n.LR[1])))/
                      ((IQR.LR[1]/sqrt(n.LR[1]))+(IQR.LR[2]/sqrt(n.LR[2]))))
-      sel.proj<-sort(proj.data[which(proj.data>quantile(proj.data,prob=0.25)& 
-                                     proj.data<quantile(proj.data,prob=0.75))])
+      sel.proj<-sort(proj.data[which(proj.data>stats::quantile(proj.data,prob=0.25)& 
+                                     proj.data<stats::quantile(proj.data,prob=0.75))])
       C<-c(c1,c2,c3,c4,c5,c6,c7,c8)
       Index<-a$indexbest
       Alpha<-t(a$projbest)

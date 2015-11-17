@@ -54,7 +54,7 @@ PP.classify(Tree.result,iris[test,1:4],1,iris[test,5])
 }
 \references{
 Lee, YD, Cook, D., Park JW, and Lee, EK(2013)
-PPtree: Projection pursuit classification tree,
+PPtree: Projection Pursuit Classification Tree,
 Electronic Journal of Statistics, 7:1369-1386.
 }
 \keyword{tree}

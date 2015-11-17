@@ -2,13 +2,13 @@ Package: PPtreeViz
 Title: Projection Pursuit Classification Tree Visualization
 Description: Tools for exploring projection pursuit classification tree using 
         various projection pursuit indices.
-Version: 1.2.0
-Author: Eun-Kyung Lee 
+Version: 1.3.0
+Author: Eun-Kyung Lee
 Maintainer: Eun-Kyung Lee <lee.eunk@gmail.com>
-Date: 2015-8-12
+Date: 2015-9-14
 Depends: R (>= 2.10),gridExtra, ggplot2
-Suggests: MASS (>= 3.1-20)
-Imports: Rcpp,stats
+Suggests: MASS (>= 3.1-20),stats
+Imports: Rcpp
 LinkingTo: Rcpp, RcppArmadillo
 License: GPL (>= 2)
 

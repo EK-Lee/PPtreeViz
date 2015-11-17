@@ -41,8 +41,8 @@ Huber.plot(iris[,1:2],iris[,5],PPmethod="LDA")
 }
 \references{
 Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005)
-Projection Pursuit for exploratory supervised classification,
-Journal of Computational and Graphical statistics, 14(4):831-846.
+Projection Pursuit for Exploratory Supervised Classification,
+Journal of Computational and Graphical Statistics, 14(4):831-846.
 }
 \keyword{projection}
 \keyword{pursuit}

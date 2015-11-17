@@ -102,7 +102,6 @@ predict.PPtreeclass<-function(object,newdata=NULL,Rule=1,...) {
                         Tree.result$splitCutoff.node,1,Rule)
    test.class<-rep(0,n)
    IOindex<-rep(1,n)
-   rep<-1
    temp<-PP.Classification(Tree.result$Tree.Struct,temp$test.class.index,
                            IOindex,test.class,1,1)
    class.name<-names(table(Tree.result$origclass))
