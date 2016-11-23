@@ -3,10 +3,10 @@
 #' Find tree structure using various projection pursuit indices of 
 #' classification in each split.
 #' @title Projection pursuit classification tree 
-#' @usage PP.Tree.class(origclass, origdata, PPmethod="LDA",weight=TRUE,
-#'                      r=1,lambda=0.1,energy=0,maxiter=50000, ...) 
-#' @param origclass class information vector
-#' @param origdata numeric data matrix without class information
+#' @usage PPTreeclass(formula,data, PPmethod="LDA",weight=TRUE,
+#'                      r=1,lambda=0.1,energy=0,maxiter=50000,...) 
+#' @param formula an object of class "formula"
+#' @param data data frame
 #' @param PPmethod method for projection pursuit; "LDA", "PDA", "Lr", 
 #'        "GINI", and "ENTROPY"
 #' @param weight weight flag in LDA, PDA and Lr index
@@ -27,10 +27,36 @@
 #' @keywords tree
 #' @examples
 #' data(iris)
-#' Tree.result <- PP.Tree.class(iris[,5],iris[,1:4],"LDA")
+#' Tree.result <- PPTreeclass(Species~.,data = iris,"LDA")
 #' Tree.result
-PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
+PPTreeclass<-function(formula,data,PPmethod="LDA",weight=TRUE,r=1,
                         lambda=0.1,energy=0,maxiter=50000,...){
+   Call<-match.call()
+   indx<-match(c("formula","data"),names(Call),nomatch=0L)
+   if(indx[1]==0L) 
+     stop("a 'formula' argument is required")
+   temp<-Call[c(1L,indx)]
+   temp[[1L]]<-quote(stats::model.frame)
+   m<-eval.parent(temp)
+   Terms<-attr(m,"terms")
+   formula<-as.character(formula)
+   class.n<-formula[2]
+   data.n<-strsplit(formula[3]," \\+ ")[[1]]
+   if(data.n[1]=="."){
+     tot.n<-class.n
+   } else{
+     tot.n<-c(class.n,data.n)
+   }     
+   if(!sum(duplicated(c(colnames(data),tot.n))[-c(1:ncol(data))])==length(tot.n)){
+     stop()
+   }else{ 
+     origclass<-data[,class.n]
+     if(data.n[1]=="."){
+       origdata<-data[,colnames(data)!=class.n]
+     }else {
+       origdata<-data[,data.n]
+     }
+   }
    TOL<-NULL
    origdata<-as.matrix(origdata)
    Find.proj<-function(origclass,origdata,PPmethod,weight,r,lambda,
@@ -67,14 +93,14 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
       TOL<-energy.temp/1000000
   
       if(PPmethod=="LDA"){
-         a<-LDAopt(as.numeric(as.factor(origclass)),origdata,weight,q=1)
+         a<-LDAopt(as.numeric(as.factor(origclass)),origdata,weight,q=1,maxiter=maxiter)
       } else if(PPmethod=="PDA"){
          a<-PDAopt(as.numeric(as.factor(origclass)),origdata,weight,q=1,
-                   lambda=lambda)   
+                   lambda=lambda,maxiter=maxiter)   
       } else {    
          a<-PPopt(as.numeric(as.factor(origclass)),as.matrix(origdata),
                   weight,q=1,PPmethod=PPmethod,r=r,energy=energy,cooling=0.999,
-                  TOL=TOL) 
+                  TOL=TOL,maxiter=maxiter) 
       } 
       proj.data<-as.matrix(origdata)%*%a$projbest
       sign<-sign(a$projbest[abs(a$projbest)==max(abs(a$projbest))])
@@ -187,7 +213,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
    
    Tree.construct<-function(origclass,origdata,Tree.Struct, 
           id,rep,rep1,rep2,projbest.node,splitCutoff.node,PPmethod,r = NULL, 
-          lambda=NULL,maxiter,...) {
+          lambda=NULL,TOL,maxiter=50000,...) {
       origclass<-as.integer(origclass)
       n<-nrow(origdata)
       g<-table(origclass)
@@ -208,7 +234,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
          Tree.Struct[id,4]<-rep2
          rep2<-rep2+1
          a<-Find.proj(origclass,origdata,PPmethod,weight,r,lambda,
-                      maxiter,...)
+                      maxiter)
          splitCutoff.node<-rbind(splitCutoff.node,a$C)
          Tree.Struct[id,5]<-a$Index
          projbest.node<-rbind(projbest.node,a$Alpha)
@@ -222,7 +248,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
          t.data<-origdata[t.index,]
          b<-Tree.construct(t.class,t.data,Tree.Struct, 
                            Tree.Struct[id, 2],rep,rep1,rep2,projbest.node, 
-                           splitCutoff.node,PPmethod,r,lambda,maxiter,...)
+                           splitCutoff.node,PPmethod,r,lambda,TOL,maxiter,...)
          Tree.Struct<-b$Tree.Struct
          projbest.node<-b$projbest.node
          splitCutoff.node<-b$splitCutoff.node
@@ -241,7 +267,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
          G<-length(table(t.class))
          b<-Tree.construct(t.class,t.data,Tree.Struct, 
                 Tree.Struct[id,3],rep,rep1,rep2,projbest.node, 
-                splitCutoff.node,PPmethod,r,lambda,maxiter,...)
+                splitCutoff.node,PPmethod,r,lambda,TOL,maxiter,...)
          Tree.Struct<-b$Tree.Struct
          projbest.node<-b$projbest.node
          splitCutoff.node<-b$splitCutoff.node
@@ -269,7 +295,7 @@ PP.Tree.class<-function(origclass,origdata,PPmethod="LDA",weight=TRUE,r=1,
    colnames(splitCutoff.node)<-paste("Rule",1:8,sep="")
    treeobj<-list(Tree.Struct=Tree.Struct,projbest.node=projbest.node, 
                  splitCutoff.node=splitCutoff.node,origclass=origclass,
-                 origdata=origdata)
+                 origdata=origdata,terms=Terms)
    class(treeobj)<-append(class(treeobj),"PPtreeclass")
    return(treeobj)
 }

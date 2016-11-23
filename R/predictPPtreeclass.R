@@ -33,8 +33,9 @@
 #' n.train <- round(n*0.9)
 #' train <- sample(tot,n.train)
 #' test <- tot[-train]
-#' Tree.result <- PP.Tree.class(iris[train,5],iris[train,1:4],"LDA")
+#' Tree.result <- PPTreeclass(Species~., data=iris[train,],"LDA")
 #' predict(Tree.result)
+#' @import stats
 predict.PPtreeclass<-function(object,newdata=NULL,Rule=1,...) {
    Tree.result<-object
    if(is.null(newdata))

@@ -2,7 +2,7 @@
 #' 
 #' Visualize the result of projection pursuit optimization
 #' @title PPopt visualization
-#' @usage PPopt.Viz(PPoptOBJ)
+#' @usage PPoptViz(PPoptOBJ)
 #' @param PPoptOBJ PPoptim object. result from LDAopt, PDAopt, and PPopt
 #' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
 #' Projection Pursuit for Exploratory Supervised Classification, 
@@ -11,11 +11,11 @@
 #' @keywords tree
 #' @examples
 #' data(iris)
-#' PPopt.Viz(LDAopt(iris[,5],iris[,1:4],q=1))
-#' PPopt.Viz(LDAopt(iris[,5],iris[,1:4],q=2))
+#' PPoptViz(LDAopt(iris[,5],iris[,1:4],q=1))
+#' PPoptViz(LDAopt(iris[,5],iris[,1:4],q=2))
 #' @import ggplot2 grid gridExtra 
 
-PPopt.Viz<-function(PPoptOBJ){
+PPoptViz<-function(PPoptOBJ){
    proj.data<-PPoptOBJ$origdata%*%PPoptOBJ$projbest
    q<-ncol(proj.data)
    p<-ncol(PPoptOBJ$origdata)   

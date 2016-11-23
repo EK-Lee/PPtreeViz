@@ -21,28 +21,6 @@ List VecSort(NumericVector IDdata,IntegerVector Auxdata) {
    }   
    return List::create(_["sortID"]=sortX,_["sortAux"]=sortY);
 }
-/*
-NumericMatrix NormalizeD(NumericMatrix rawdata){
-   int n=rawdata.nrow(),p=rawdata.ncol();  
-   NumericMatrix normdata(n,p);
-   NumericVector vmean(p),vs(p);  
-   for(int k=0;k<p;k++){
-      for(int i=0; i<n; i++){
-        vmean(k) += rawdata(i,k);
-        vs(k) += pow(rawdata(i,k),2);
-     }
-     vmean(k) /=n;
-     vs(k) = pow((vs(k) - n*pow(vmean(k),2))/(n-1),0.5);
-   }
-   for(int k=0;k<p;k++){
-      for(int i=0; i<n; i++){
-        normdata(i,k) = (rawdata(i,k)-vmean(k))/vs(k);
-     }
-   }
-   return normdata; 
-}
-
-*/
 
 NumericMatrix NormalizeProj(NumericMatrix proj){
    int p=proj.nrow(),q=proj.ncol();
@@ -69,26 +47,8 @@ NumericMatrix NormalizeProj(NumericMatrix proj){
    return normproj; 
 }
 
-//' LDA projection pursuit index
-//' 
-//' Calculate LDA projection pursuit index value
-//' @title LDA PPindex
-//' @usage LDAindex(origclass,origdata,proj,weight=TRUE)
-//' @param origclass class information vector
-//' @param origdata data matrix without class information  
-//' @param proj projection matrix 
-//' @param weight weight flag in LDA
-//' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
-//' Projection Pursuit for exploratory supervised classification, 
-//' Journal of Computational and Graphical statistics, 14(4):831-846.
-//' @export
-//' @keywords projection pursuit
-//' @examples
-//' data(iris)
-//' LDAindex(iris[,5],as.matrix(iris[,1:4]))
-//' @useDynLib PPtreeViz
-//' @importFrom Rcpp evalCpp
-// [[Rcpp::export]]
+
+// [[Rcpp::export(name=".LDAindex")]]
 
 double LDAindex(IntegerVector origclass, NumericMatrix origdata, 
                 NumericMatrix proj=NumericMatrix(0),bool weight=true){
@@ -146,27 +106,8 @@ double LDAindex(IntegerVector origclass, NumericMatrix origdata,
    index=1.0-as<double>(det(wrap(W)))/as<double>(det(wrap(WB)));
    return index;
 }
-//' PDA projection pursuit index 
-//' 
-//' Calculate PDA projection pursuit index value 
-//' @title PDA PPindex
-//' @usage PDAindex(origclass,origdata,proj,weight=TRUE,lambda=0.1)
-//' @param origclass class information vector
-//' @param origdata data matrix without class information  
-//' @param proj projection matrix 
-//' @param weight weight flag in PDA
-//' @param lambda lambda in PDA index
-//' @references Lee, EK., Cook, D.(2010) 
-//' A projection pursuit index for large p small n data, 
-//' Statistics and Computing, 20:381-392.
-//' @export
-//' @keywords projection pursuit
-//' @examples
-//' data(iris)
-//' PDAindex(iris[,5],as.matrix(iris[,1:4]),lambda=0.2)
-//' 
-//' 
-// [[Rcpp::export]]
+
+// [[Rcpp::export(name=".PDAindex")]]
 double PDAindex(IntegerVector origclass, NumericMatrix origdata,
                 NumericMatrix proj=NumericMatrix(0),bool weight=true,
                 double lambda=0.1){
@@ -248,26 +189,8 @@ double PDAindex(IntegerVector origclass, NumericMatrix origdata,
    index=1.0-as<double>(det(wrap(Wtt)))/as<double>(det(wrap(WBtt)));   
    return index;
 }
-//' Lr projection pursuit index
-//' 
-//' Calculate Lr projection pursuit index value
-//' @title Lr PPindex
-//' @usage Lrindex(origclass,origdata,proj,weight=TRUE,r=1)
-//' @param origclass class information vector
-//' @param origdata data matrix without class information  
-//' @param proj projection matrix 
-//' @param weight weight flag in Lr index
-//' @param r r in Lr index
-//' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
-//' Projection Pursuit for exploratory supervised classification, 
-//' Journal of Computational and Graphical statistics, 14(4):831-846.
-//' @export
-//' @keywords projection pursuit
-//' @examples
-//' data(iris)
-//' Lrindex(iris[,5],as.matrix(iris[,1:4]),r=1)
-//' 
-// [[Rcpp::export]]
+
+// [[Rcpp::export(name=".Lrindex")]]
 
 double Lrindex(IntegerVector origclass, NumericMatrix origdata,
                NumericMatrix proj=NumericMatrix(0),bool weight=true,int r=1){
@@ -318,20 +241,7 @@ double Lrindex(IntegerVector origclass, NumericMatrix origdata,
    return index;
 }
 
-//' GINI projection pursuit index
-//' 
-//' Calculate GINI projection pursuit index value
-//' @title GINI PPindex
-//' @usage GINIindex1D(origclass,origdata,proj)
-//' @param origclass class information vector
-//' @param origdata data matrix without class information  
-//' @param proj projection matrix
-//' @export
-//' @keywords projection pursuit
-//' @examples
-//' data(iris)
-//' GINIindex1D(iris[,5],as.matrix(iris[,1,drop=FALSE]))
-// [[Rcpp::export]]
+// [[Rcpp::export(name=".GINIindex1D")]]
 
 double GINIindex1D(IntegerVector origclass,NumericMatrix origdata,
                    NumericVector proj=NumericVector(0)){ 
@@ -376,20 +286,7 @@ double GINIindex1D(IntegerVector origclass,NumericMatrix origdata,
    return index;
 }
 
-//' ENTROPY projection pursuit index 
-//' 
-//' Calculate ENTROPY projection pursuit index value
-//' @title ENTROPY PPindex
-//' @usage ENTROPYindex1D(origclass,origdata,proj)
-//' @param origclass class information vector
-//' @param origdata data matrix without class information  
-//' @param proj projection matrix
-//' @export
-//' @keywords projection pursuit
-//' @examples
-//' data(iris)
-//' ENTROPYindex1D(iris[,5],as.matrix(iris[,1,drop=FALSE]))
-// [[Rcpp::export]]
+// [[Rcpp::export(name=".ENTROPYindex1D")]]
 
 double ENTROPYindex1D(IntegerVector origclass,NumericMatrix origdata,
                       NumericVector proj=NumericVector(0)){
@@ -441,39 +338,7 @@ double ENTROPYindex1D(IntegerVector origclass,NumericMatrix origdata,
    return index;
 }
 
-//' PP optimization using various projection pursuit indices
-//' 
-//' Find the q-dim optimal projection using various projectin pursuit indices 
-//' with class information
-//' @title Projection pursuit optimization
-//' @usage PPopt(origclass,origdata,q=1,PPmethod="LDA",weight=TRUE,r=1,
-//'              lambda=0.1,energy=0,cooling=0.999,TOL=0.0001,maxiter = 50000)
-//' @param origclass class information vector
-//' @param origdata data matrix without class information
-//' @param q dimension of projection matrix
-//' @param PPmethod method for projection pursuit; "LDA", "PDA", "Lr", "GINI", 
-//'                 and "ENTROPY"
-//' @param weight weight flag in LDA, PDA and Lr index
-//' @param r r in Lr index
-//' @param lambda lambda in PDA index
-//' @param energy energy parameter
-//' @param cooling cooling parameter
-//' @param TOL tolerance
-//' @param maxiter number of maximum iteration
-//' @return indexbest maximum LDA index value
-//' @return projbest optimal q-dim projection matrix
-//' @return origclass original class information vector
-//' @return origdata  original data matrix  without class information
-//' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
-//' Projection Pursuit for exploratory supervised classification, 
-//' Journal of Computational and Graphical statistics, 14(4):831-846.
-//' @export
-//' @keywords projection pursuit
-//' @examples
-//' data(iris)
-//' PP.proj.result <- PPopt(iris[,5],as.matrix(iris[,1:4]))
-//' PP.proj.result
-// [[Rcpp::export]]
+// [[Rcpp::export(name=".PPopt")]]
 List PPopt(IntegerVector origclass,NumericMatrix origdata,int q=1, 
            std::string PPmethod="LDA",bool weight=true,int r=1,
            double lambda=0.1,double energy=0,double cooling=0.999, 

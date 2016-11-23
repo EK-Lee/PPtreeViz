@@ -15,7 +15,7 @@
 #' @aliases plot
 #' @examples
 #' data(iris)
-#' Tree.result <- PP.Tree.class(iris[,5],iris[,1:4],"LDA")
+#' Tree.result <- PPTreeclass(Species~., data = iris,"LDA")
 #' Tree.result
 #' plot(Tree.result)
 plot.PPtreeclass<-function(x,font.size=17,width.size=1,...){

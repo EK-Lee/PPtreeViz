@@ -5,7 +5,7 @@
 #' projected data, the bar chart style plots with means of each variables for 
 #' the left and the right group, and the image plot of correlations. 
 #' @title PPtree node visualization
-#' @usage PPclassNode.Viz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
+#' @usage PPclassNodeViz(PPclassOBJ,node.id,Rule,legend,std,image,diff.prop)
 #' @param PPclassOBJ PPregclass object
 #' @param node.id node ID
 #' @param Rule cutoff rule
@@ -21,10 +21,10 @@
 #' @keywords tree
 #' @examples
 #' data(iris)
-#' Tree.result <- PP.Tree.class(iris[,5],iris[,1:4],"LDA")
+#' Tree.result <- PPTreeclass(Species~., data = iris,"LDA")
 #' Tree.result
-#' PPclassNode.Viz(Tree.result,1,1)
-PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
+#' PPclassNodeViz(Tree.result,1,1)
+PPclassNodeViz<-function(PPclassOBJ,node.id,Rule,
                           legend=TRUE,std=TRUE,image=FALSE,diff.prop=0.2){
    searchGroup<-function(node.id,TS,gName){
       flag<-TRUE
@@ -155,7 +155,7 @@ PPclassNode.Viz<-function(PPclassOBJ,node.id,Rule,
          gridExtra::grid.arrange(p2,p3,p1,nrow=1)
       }  
    } else{
-      sel.id<-which(PP.classify(PPclassOBJ,origdata,Rule)$predict.class==
+      sel.id<-which(PPclassify(PPclassOBJ,origdata,Rule)$predict.class==
                                                           gName[TS[node.id,3]])
       find.i<-TS[which((TS[,2]==node.id|TS[,3]==node.id)& TS[,2]!=0),4]
       proj.data<-c(as.matrix(origdata)%*%as.matrix(Alpha[find.i,]))[sel.id]

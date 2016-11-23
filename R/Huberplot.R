@@ -4,7 +4,7 @@
 #' the histogram of the projected data onto the optimal projection to 
 #' explore the behavior of the projection prsuit indices
 #' @title Huber plot
-#' @usage Huber.plot(origdata2D,origclass,PPmethod="LDA",weight=TRUE,r=1,
+#' @usage Huberplot(origdata2D,origclass,PPmethod="LDA",weight=TRUE,r=1,
 #'            lambda=0.5,opt.proj=TRUE,UserDefFtn=NULL,...)
 #' @param origdata2D 2-dimensional numerical data for Huber plot
 #' @param origclass class information vector of data
@@ -23,8 +23,8 @@
 #' @keywords projection pursuit
 #' @examples
 #' data(iris)
-#' Huber.plot(iris[,1:2],iris[,5],PPmethod="LDA")
-Huber.plot<-function(origdata2D,origclass,PPmethod="LDA",
+#' Huberplot(iris[,1:2],iris[,5],PPmethod="LDA")
+Huberplot<-function(origdata2D,origclass,PPmethod="LDA",
                      weight=TRUE,r=1,lambda=0.5,opt.proj=TRUE,
                      UserDefFtn=NULL,...){  
    index<-NULL

@@ -3,7 +3,7 @@
 #' Predict class for the test set with the fitted projection pursuit 
 #' classification tree and calculate prediction error.
 #' @title predict PPtree
-#' @usage PP.classify(Tree.result,test.data,Rule,true.class=NULL,...)  
+#' @usage PPclassify(Tree.result,test.data,Rule,true.class=NULL,...)  
 #' @param Tree.result PPtreeclass object 
 #' @param test.data  the test dataset
 #' @param Rule split rule 1: mean of two group means 
@@ -36,9 +36,9 @@
 #' n.train <- round(n*0.9)
 #' train <- sample(tot,n.train)
 #' test <- tot[-train]
-#' Tree.result <- PP.Tree.class(iris[train,5],iris[train,1:4],"LDA")
-#' PP.classify(Tree.result,iris[test,1:4],1,iris[test,5])
-PP.classify<-function(Tree.result,test.data=NULL,Rule=1,true.class=NULL,...) {
+#' Tree.result <- PPTreeclass(Species~.,data=iris[train,],"LDA")
+#' PPclassify(Tree.result,iris[test,1:4],1,iris[test,5])
+PPclassify<-function(Tree.result,test.data=NULL,Rule=1,true.class=NULL,...) {
   if(is.null(test.data))
     test.data<-Tree.result$origdata
    test.data<-as.matrix(test.data)
