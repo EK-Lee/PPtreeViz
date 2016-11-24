@@ -54,13 +54,14 @@ PPTreeclass<-function(formula,data,PPmethod="LDA",weight=TRUE,r=1,
      if(data.n[1]=="."){
        origdata<-data[,colnames(data)!=class.n]
      }else {
-       origdata<-data[,data.n]
+       origdata<-data[,data.n,drop=FALSE]
      }
    }
    TOL<-NULL
    origdata<-as.matrix(origdata)
    Find.proj<-function(origclass,origdata,PPmethod,weight,r,lambda,
                        maxiter,...){
+      origdata<-as.matrix(origdata)
       n<-nrow(origdata)
       p<-ncol(origdata)
       g<-table(origclass)
@@ -104,9 +105,12 @@ PPTreeclass<-function(formula,data,PPmethod="LDA",weight=TRUE,r=1,
       } 
       proj.data<-as.matrix(origdata)%*%a$projbest
       sign<-sign(a$projbest[abs(a$projbest)==max(abs(a$projbest))])
-      index<-(1:p)*(abs(a$projbest)==max(abs(a$projbest)))
-      index<-index[index>0]
-
+      if(p==1){
+         index <- 1
+      } else{
+         index<-(1:p)*(abs(a$projbest)==max(abs(a$projbest)))
+         index<-index[index>0]
+      }
       if(G==2){
          class<-origclass
       } else{
@@ -215,6 +219,7 @@ PPTreeclass<-function(formula,data,PPmethod="LDA",weight=TRUE,r=1,
           id,rep,rep1,rep2,projbest.node,splitCutoff.node,PPmethod,r = NULL, 
           lambda=NULL,TOL,maxiter=50000,...) {
       origclass<-as.integer(origclass)
+      origdata<-as.matrix(origdata)
       n<-nrow(origdata)
       g<-table(origclass)
       G<-length(g)
