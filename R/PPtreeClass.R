@@ -42,14 +42,17 @@ PPTreeclass<-function(formula,data,PPmethod="LDA",weight=TRUE,r=1,
    formula<-as.character(formula)
    class.n<-formula[2]
    data.n<-strsplit(formula[3]," \\+ ")[[1]]
+   int.flag<-any(strsplit(formula[3]," \\* ")[[1]] == formula[3])
    if(data.n[1]=="."){
      tot.n<-class.n
    } else{
      tot.n<-c(class.n,data.n)
    }     
-   if(!sum(duplicated(c(colnames(data),tot.n))[-c(1:ncol(data))])==length(tot.n)){
-     stop()
-   }else{ 
+   if(!int.flag){
+     stop("PPTreeclass cannot treat interaction terms")
+   }else if(!sum(duplicated(c(colnames(data),tot.n))[-c(1:ncol(data))])==length(tot.n)){
+     
+   }else{
      origclass<-data[,class.n]
      if(data.n[1]=="."){
        origdata<-data[,colnames(data)!=class.n]
