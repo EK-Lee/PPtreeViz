@@ -255,7 +255,7 @@ plot.PPtreeclass<-function(x,font.size=17,width.size=1,main="Projection Pursuit 
    pushViewport(PPtree.title.V)
    grid.text(y=unit(1,"lines"),
              paste("\n",main,sep=""),
-             just="center")
+             just="center",gp=gpar(fontsize=font.size))
    upViewport()
    PPtree.Tree.V<-viewport(layout.pos.col=2,layout.pos.row=2, 
     			                 xscale=c(0,nx),yscale=c(0,ny+1))
@@ -263,6 +263,6 @@ plot.PPtreeclass<-function(x,font.size=17,width.size=1,main="Projection Pursuit 
    plotPPtree(PPtreeobj,1,c(0,nx),ylim=c(1,ny+1)) 
    grid.text(y=unit(1,"lines"),
              sub,
-             just="center")
+             just="center",gp=gpar(fontsize=font.size*0.7))
 }
  
