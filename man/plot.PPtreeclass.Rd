@@ -5,7 +5,8 @@
 \alias{plot.PPtreeclass}
 \title{PPtree plot}
 \usage{
-\method{plot}{PPtreeclass}(x, font.size = 17, width.size = 1, ...)
+\method{plot}{PPtreeclass}(x, font.size = 17, width.size = 1,
+  main = "Projection Pursuit Classification Tree", sub = NULL, ...)
 }
 \arguments{
 \item{x}{PPtreeclass object}
@@ -13,6 +14,10 @@
 \item{font.size}{font size of plot}
 
 \item{width.size}{size of eclipse in each node.}
+
+\item{main}{main title}
+
+\item{sub}{sub title}
 
 \item{...}{arguments to be passed to methods}
 }

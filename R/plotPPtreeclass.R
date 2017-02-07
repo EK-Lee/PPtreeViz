@@ -6,6 +6,8 @@
 #' @param x PPtreeclass object
 #' @param font.size font size of plot
 #' @param width.size size of eclipse in each node.
+#' @param main main title
+#' @param sub sub title
 #' @param ... arguments to be passed to methods
 #' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
 #' PPtree: Projection Pursuit Classification Tree, 
@@ -252,12 +254,15 @@ plot.PPtreeclass<-function(x,font.size=17,width.size=1,main="Projection Pursuit 
    PPtree.title.V<-viewport(layout.pos.col=2,layout.pos.row=1)
    pushViewport(PPtree.title.V)
    grid.text(y=unit(1,"lines"),
-             paste("\n",main,"\n",sub,sep=""),
+             paste("\n",main,sep=""),
              just="center")
    upViewport()
    PPtree.Tree.V<-viewport(layout.pos.col=2,layout.pos.row=2, 
     			                 xscale=c(0,nx),yscale=c(0,ny+1))
    pushViewport(PPtree.Tree.V)
-   plotPPtree(PPtreeobj,1,c(0,nx),ylim=c(1,ny+1))   
+   plotPPtree(PPtreeobj,1,c(0,nx),ylim=c(1,ny+1)) 
+   grid.text(y=unit(1,"lines"),
+             sub,
+             just="center")
 }
  
