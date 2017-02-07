@@ -18,7 +18,7 @@
 #' Tree.result <- PPTreeclass(Species~., data = iris,"LDA")
 #' Tree.result
 #' plot(Tree.result)
-plot.PPtreeclass<-function(x,font.size=17,width.size=1,...){
+plot.PPtreeclass<-function(x,font.size=17,width.size=1,main="Projection Pursuit Classification Tree",sub=NULL,...){
    PPtreeobj<-x
    plotPPtree<-function(PPtreeobj,node.id,xlim,ylim){
       TS<-PPtreeobj$Tree.Struct
@@ -252,7 +252,7 @@ plot.PPtreeclass<-function(x,font.size=17,width.size=1,...){
    PPtree.title.V<-viewport(layout.pos.col=2,layout.pos.row=1)
    pushViewport(PPtree.title.V)
    grid.text(y=unit(1,"lines"),
-             "Projection Pursuit Classification Tree",
+             paste("\n",main,"\n",sub,sep=""),
              just="center")
    upViewport()
    PPtree.Tree.V<-viewport(layout.pos.col=2,layout.pos.row=2, 
