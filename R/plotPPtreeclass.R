@@ -9,9 +9,9 @@
 #' @param main main title
 #' @param sub sub title
 #' @param ... arguments to be passed to methods
-#' @references Lee, YD, Cook, D., Park JW, and Lee, EK(2013) 
-#' PPtree: Projection Pursuit Classification Tree, 
-#' Electronic Journal of Statistics, 7:1369-1386.
+#' @references Lee, EK(2017) 
+#' PPtreeViz: R Package for Visualization of projection Pursuit Classification 
+#' Tree, Journal of Statistical Software.
 #' @export
 #' @keywords tree
 #' @aliases plot

@@ -21,9 +21,9 @@ PPoptViz(LDAopt(iris[,5],iris[,1:4],q=1))
 PPoptViz(LDAopt(iris[,5],iris[,1:4],q=2))
 }
 \references{
-Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
-Projection Pursuit for Exploratory Supervised Classification, 
-Journal of Computational and Graphical Statistics, 14(4):831-846.
+Lee, EK(2017) 
+PPtreeViz: R Package for Visualization of projection Pursuit Classification 
+Tree, Journal of Statistical Software.
 }
 \keyword{tree}
 

@@ -4,9 +4,9 @@
 #' @title PPopt visualization
 #' @usage PPoptViz(PPoptOBJ)
 #' @param PPoptOBJ PPoptim object. result from LDAopt, PDAopt, and PPopt
-#' @references Lee, EK., Cook, D., Klinke, S., and Lumley, T.(2005) 
-#' Projection Pursuit for Exploratory Supervised Classification, 
-#' Journal of Computational and Graphical Statistics, 14(4):831-846.
+#' @references Lee, EK(2017) 
+#' PPtreeViz: R Package for Visualization of projection Pursuit Classification 
+#' Tree, Journal of Statistical Software.
 #' @export
 #' @keywords tree
 #' @examples
